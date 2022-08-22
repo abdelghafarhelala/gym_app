@@ -1,0 +1,22 @@
+const String registerUrl = 'register';
+const String loginUrl = 'login';
+const String profileUrl = 'profile';
+const String updateProfile = 'profile/info';
+const String sendEmailUrl = 'forget-pass-user';
+const String foodAdvicesUrl = 'categories/t/ar/1/0';
+const String resetPasswordUrl = 'password/forget';
+const String logOutUrl = 'logout';
+const String packageUrl = 'packages/ar/0';
+const String favoriteUrl = 'user_favorite';
+const String rateUrl = 'user_rates';
+const String changePasswordUrl = 'change_password';
+const String trainAdvicesUrl = 'categories/t/ar/0/0';
+const String contactUsUrl = 'contact_us';
+const String trainingUrl = 'trainings/ar/0/0';
+const String updateProfileUrl = 'update_profile/0';
+const String trainPlanUrl = 'plans/ar/trainings';
+const String foodPlanUrl = 'plans/ar/food';
+const String trainingOfferUrl = 'trainings/ar/0/0';
+const String makeRequestUrl = 'user-training-order';
+
+String? imageLink = 'https://gym.masool.net/uploads/';
