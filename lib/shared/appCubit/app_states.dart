@@ -13,6 +13,7 @@ import 'package:gym_app/models/training/training_model.dart';
 import 'package:gym_app/models/training_offers/training_offers_model.dart';
 import 'package:gym_app/models/update_profile/update_profile_model.dart';
 import 'package:gym_app/models/userModel/userModel.dart';
+import 'package:gym_app/models/user_rates_model/user_rates_model.dart';
 
 abstract class AppStates {}
 
@@ -83,6 +84,18 @@ class AppMakeRateSuccessState extends AppStates {
 class AppMakeRateErrorState extends AppStates {}
 
 class AppMakeRateLoadingState extends AppStates {}
+
+//get user rate
+//get food advices states
+class AppGetUserRateSuccessState extends AppStates {
+  final UserRatesModel? model;
+
+  AppGetUserRateSuccessState(this.model);
+}
+
+class AppGetUserRateErrorState extends AppStates {}
+
+class AppGetUserRateLoadingState extends AppStates {}
 
 //reset Password states
 class AppRestPasswordSuccessState extends AppStates {

@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gym_app/modules/full_screen_image/full_screen_image.dart';
 import 'package:gym_app/modules/history/history_screen.dart';
 import 'package:gym_app/modules/my_tranning/my_trainning_screen.dart';
 import 'package:gym_app/modules/qr_code/creat_qr_screen.dart';
@@ -62,20 +63,38 @@ class ProfileScreen extends StatelessWidget {
                                     ?.data
                                     ?.profilePhotoPath ==
                                 null)
-                              const CircleAvatar(
-                                radius: 55,
-                                backgroundImage: NetworkImage(
-                                    'https://img.freepik.com/free-photo/young-muscular-athlete-practicing-gym-posing-confident-with-weights_155003-35490.jpg?size=338&ext=jpg&ga=GA1.2.1634405249.1648830357'),
+                              InkWell(
+                                onTap: () {
+                                  navigateTo(
+                                      context,
+                                      FullScreenImageScreen(
+                                          imagePath:
+                                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwnYnwftDUSjsQmLQvMBZ2pwDXhAJiIdfKvg&usqp=CAU'));
+                                },
+                                child: const CircleAvatar(
+                                  radius: 55,
+                                  backgroundImage: NetworkImage(
+                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwnYnwftDUSjsQmLQvMBZ2pwDXhAJiIdfKvg&usqp=CAU'),
+                                ),
                               ),
                             if (AppCubit.get(context)
                                     .profile
                                     ?.data
                                     ?.profilePhotoPath !=
                                 null)
-                              CircleAvatar(
-                                radius: 55,
-                                backgroundImage: NetworkImage(
-                                    '$imageLink${AppCubit.get(context).profile?.data?.profilePhotoPath}'),
+                              InkWell(
+                                onTap: () {
+                                  navigateTo(
+                                      context,
+                                      FullScreenImageScreen(
+                                          imagePath:
+                                              '$imageLink${AppCubit.get(context).profile?.data?.profilePhotoPath}'));
+                                },
+                                child: CircleAvatar(
+                                  radius: 55,
+                                  backgroundImage: NetworkImage(
+                                      '$imageLink${AppCubit.get(context).profile?.data?.profilePhotoPath}'),
+                                ),
                               ),
                             const SizedBox(
                               width: 20,
@@ -718,8 +737,8 @@ class ProfileScreen extends StatelessWidget {
                               //training plan
                               InkWell(
                                 onTap: () {
-                                  print(profileModel
-                                      ?.package?[0].packageData?.name);
+                                  // print(profileModel
+                                  //     ?.package?[0].packageData?.name);
                                   AppCubit.get(context).myTrainingIndex = 2;
                                   navigateTo(
                                       context,
@@ -770,9 +789,9 @@ class ProfileScreen extends StatelessWidget {
                               ),
                               InkWell(
                                 onTap: () {
-                                  print(profileModel
-                                      ?.package?[0].packageData?.name);
-                                  AppCubit.get(context).myTrainingIndex = 0;
+                                  // print(profileModel
+                                  // ?.package?[0].packageData?.name);
+                                  // AppCubit.get(context).myTrainingIndex = 0;
                                   navigateTo(
                                       context,
                                       HistoryScreen(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_app/modules/layoutScreen/layoutScreen.dart';
 import 'package:gym_app/modules/login/login.dart';
 import 'package:gym_app/shared/appCubit/app_cubit.dart';
 import 'package:gym_app/shared/appCubit/app_states.dart';
@@ -31,7 +32,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           if (state.model?.result == true) {
             showToast(
                 text: state.model?.errorMessage, state: ToastStates.success);
-            navigateTo(context, const LoginScreen());
+            AppCubit.get(context).currentIndex = 2;
+            navigateTo(context, LayoutScreen());
           } else {
             showToast(
                 text: state.model?.errorMessage, state: ToastStates.error);
@@ -58,7 +60,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             ),
             elevation: 0,
           ),
-          resizeToAvoidBottomInset: false,
+          // resizeToAvoidBottomInset: false,
           body: AnnotatedRegion<SystemUiOverlayStyle>(
             value: const SystemUiOverlayStyle(
               // For Android.
@@ -69,133 +71,142 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               // Use [dark] for white status bar and [light] for black status bar.
               statusBarBrightness: Brightness.dark,
             ),
-            child: Center(
-              child: Form(
-                key: _productKey,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: screenHeight / 35),
-                      child: Column(
-                        children: [
-                          const Image(
-                            image: AssetImage(
-                              'assets/images/reset.png',
+            child: SingleChildScrollView(
+              child: Center(
+                child: Form(
+                  key: _productKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: screenHeight / 35),
+                        child: Column(
+                          children: [
+                            const Image(
+                              image: AssetImage(
+                                'assets/images/reset.png',
+                              ),
+                              height: 200,
+                              width: 300,
+                              fit: BoxFit.cover,
                             ),
-                            height: 200,
-                            width: 300,
-                            fit: BoxFit.cover,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text(
-                            '''تغيير كلمة السر ''',
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.w700),
-                          ),
-                          SizedBox(
-                            height: screenHeight / 30,
-                          ),
-                          Card(
-                            shape: BeveledRectangleBorder(
-                              borderRadius: BorderRadius.circular(4.0),
+                            const SizedBox(
+                              height: 20,
                             ),
-                            elevation: 1.5,
-                            child: defaultTextFieldWithCustomIconImage(
-                                lable: 'كلمة السر القديمة',
-                                controller: oldPasswordController,
-                                prefix: const ImageIcon(
-                                    AssetImage('assets/images/key.png')),
-                                validate: (String value) {
-                                  if (value.isEmpty) {
-                                    return 'يجب ان تدخل كلمة السر القديمة';
-                                  }
-                                },
-                                context: context,
-                                type: TextInputType.emailAddress),
-                          ),
-                          SizedBox(
-                            height: screenHeight / 34,
-                          ),
-                          Card(
-                            shape: BeveledRectangleBorder(
-                              borderRadius: BorderRadius.circular(4.0),
+                            const Text(
+                              '''تغيير كلمة السر ''',
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.w700),
                             ),
-                            elevation: 1.5,
-                            child: defaultTextFieldWithCustomIconImage(
-                                controller: newPasswordController,
-                                lable: 'كلمة السر الجديده ',
-                                prefix: const ImageIcon(
-                                    AssetImage('assets/images/padlock.png')),
-                                suffix: AppCubit.get(context).suffix,
-                                suffixPressed: () {
-                                  AppCubit.get(context)
-                                      .changePasswordVisibility();
-                                },
-                                isSecure: AppCubit.get(context).isPass,
-                                validate: (String value) {
-                                  if (value.isEmpty) {
-                                    return 'يجب أن تدخل كلمة السر الجديدة ';
-                                  }
-                                },
-                                context: context,
-                                type: TextInputType.visiblePassword),
-                          ),
-                          SizedBox(
-                            height: screenHeight / 34,
-                          ),
-                          Card(
-                            shape: BeveledRectangleBorder(
-                              borderRadius: BorderRadius.circular(4.0),
+                            SizedBox(
+                              height: screenHeight / 30,
                             ),
-                            elevation: 1.5,
-                            child: defaultTextFieldWithCustomIconImage(
-                                controller: confirmNewPasswordController,
-                                lable: 'تأكيد كلمة السر الجديدة',
-                                prefix: const ImageIcon(AssetImage(
-                                  'assets/images/padlock.png',
-                                )),
-                                suffix: AppCubit.get(context).suffixx,
-                                suffixPressed: () {
-                                  AppCubit.get(context)
-                                      .changePasswordVisibilityy();
-                                },
-                                isSecure: AppCubit.get(context).isPasss,
-                                validate: (String value) {
-                                  if (value.isEmpty) {
-                                    return 'يجب أن تدخل تأكيد كلمة السر الجديدة  ';
-                                  }
-                                },
-                                context: context,
-                                type: TextInputType.visiblePassword),
-                          ),
-                          SizedBox(
-                            height: screenHeight / 35,
-                          ),
-                          ConditionalBuilder(
-                            condition: state is! AppChangePasswordLoadingState,
-                            builder: (context) => defaultButton(
-                                fontSize: 22,
-                                height: screenHeight / 16,
-                                onPress: () {
-                                  if (_productKey.currentState!.validate()) {
-                                    AppCubit.get(context).updatePasswordData(
-                                        oldPassword: oldPasswordController.text,
-                                        newPassword: newPasswordController.text,
-                                        confirmNewPassword:
-                                            confirmNewPasswordController.text);
-                                  } else {}
-                                },
-                                text: 'Update'),
-                            fallback: (context) => const Center(
-                                child: CircularProgressIndicator()),
-                          ),
-                        ],
+                            Card(
+                              shape: BeveledRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              elevation: 1.5,
+                              child: defaultTextFieldWithCustomIconImage(
+                                  lable: 'كلمة السر القديمة',
+                                  controller: oldPasswordController,
+                                  prefix: const ImageIcon(
+                                      AssetImage('assets/images/key.png')),
+                                  validate: (String value) {
+                                    if (value.isEmpty) {
+                                      return 'يجب ان تدخل كلمة السر القديمة';
+                                    }
+                                  },
+                                  context: context,
+                                  type: TextInputType.emailAddress),
+                            ),
+                            SizedBox(
+                              height: screenHeight / 34,
+                            ),
+                            Card(
+                              shape: BeveledRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              elevation: 1.5,
+                              child: defaultTextFieldWithCustomIconImage(
+                                  controller: newPasswordController,
+                                  lable: 'كلمة السر الجديده ',
+                                  prefix: const ImageIcon(
+                                      AssetImage('assets/images/padlock.png')),
+                                  suffix: AppCubit.get(context).suffix,
+                                  suffixPressed: () {
+                                    AppCubit.get(context)
+                                        .changePasswordVisibility();
+                                  },
+                                  isSecure: AppCubit.get(context).isPass,
+                                  validate: (String value) {
+                                    if (value.isEmpty) {
+                                      return 'يجب أن تدخل كلمة السر الجديدة ';
+                                    }
+                                  },
+                                  context: context,
+                                  type: TextInputType.visiblePassword),
+                            ),
+                            SizedBox(
+                              height: screenHeight / 34,
+                            ),
+                            Card(
+                              shape: BeveledRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              elevation: 1.5,
+                              child: defaultTextFieldWithCustomIconImage(
+                                  controller: confirmNewPasswordController,
+                                  lable: 'تأكيد كلمة السر الجديدة',
+                                  prefix: const ImageIcon(AssetImage(
+                                    'assets/images/padlock.png',
+                                  )),
+                                  suffix: AppCubit.get(context).suffixx,
+                                  suffixPressed: () {
+                                    AppCubit.get(context)
+                                        .changePasswordVisibilityy();
+                                  },
+                                  isSecure: AppCubit.get(context).isPasss,
+                                  validate: (String value) {
+                                    if (value.isEmpty) {
+                                      return 'يجب أن تدخل تأكيد كلمة السر الجديدة  ';
+                                    }
+                                  },
+                                  context: context,
+                                  type: TextInputType.visiblePassword),
+                            ),
+                            SizedBox(
+                              height: screenHeight / 35,
+                            ),
+                            ConditionalBuilder(
+                              condition:
+                                  state is! AppChangePasswordLoadingState,
+                              builder: (context) => defaultButton(
+                                  fontSize: 22,
+                                  height: screenHeight / 16,
+                                  onPress: () {
+                                    if (_productKey.currentState!.validate()) {
+                                      AppCubit.get(context).updatePasswordData(
+                                          oldPassword:
+                                              oldPasswordController.text,
+                                          newPassword:
+                                              newPasswordController.text,
+                                          confirmNewPassword:
+                                              confirmNewPasswordController
+                                                  .text);
+                                    } else {}
+                                  },
+                                  text: 'Update'),
+                              fallback: (context) => const Center(
+                                  child: CircularProgressIndicator()),
+                            ),
+                            const SizedBox(
+                              height: 50,
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

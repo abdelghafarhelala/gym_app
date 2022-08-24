@@ -11,8 +11,9 @@ import 'package:gym_app/shared/components/components.dart';
 class LayoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var controller = PageController(initialPage: 2);
     var cubit = AppCubit.get(context);
+
+    var controller = PageController(initialPage: cubit.currentIndex);
 
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
@@ -38,6 +39,7 @@ class LayoutScreen extends StatelessWidget {
             height: 60,
             items: cubit.buttonWidget(cubit.currentIndex),
             onTap: (index) {
+              if (index == 1) {}
               controller.animateToPage(index,
                   duration: Duration(milliseconds: 300), curve: Curves.ease);
             },

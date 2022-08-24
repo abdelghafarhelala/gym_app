@@ -1,7 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gym_app/network/endpoints.dart';
 import 'package:gym_app/shared/appCubit/app_cubit.dart';
 import 'package:gym_app/shared/appCubit/app_states.dart';
 import 'package:gym_app/shared/colors.dart';
@@ -21,6 +20,8 @@ class HomeScreen extends StatelessWidget {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
+        double screenHight = MediaQuery.of(context).size.height;
+        print(screenHight);
         return ConditionalBuilder(
           condition: (AppCubit.get(context).foodAdvices?.data?.length ?? 0) >
                   0 &&
@@ -163,7 +164,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                buildSliderItem(220, 12)
+                buildSliderItem(screenHight > 780 ? 220 : 170, 12)
               ],
             ),
           ),

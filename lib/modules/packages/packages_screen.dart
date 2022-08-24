@@ -19,6 +19,8 @@ class PackagesScreen extends StatelessWidget {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
+        double screenHight = MediaQuery.of(context).size.height;
+
         return ConditionalBuilder(
           condition: state is! AppGetPackagesLoadingState,
           fallback: (context) =>
@@ -78,25 +80,37 @@ class PackagesScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: ListView.separated(
                           physics: const BouncingScrollPhysics(),
-                          itemBuilder: (context, index) => buildTrainItem(
-                              context,
-                              model: cubit?.data?[index],
-                              price: cubit?.data?[index].price,
-                              rate: double.parse(AppCubit.get(context)
-                                      .packagesModel
-                                      ?.data?[index]
-                                      .ratesAvgRate ??
-                                  '1'),
-                              AppCubit.get(context)
-                                  .packagesModel
-                                  ?.data?[index]
-                                  .name,
-                              AppCubit.get(context)
-                                  .packagesModel
-                                  ?.data?[index]
-                                  .img,
-                              true,
-                              false),
+                          itemBuilder: (context, index) => InkWell(
+                                onTap: () {
+                                  AppCubit.get(context).getUserRateData(
+                                      id: cubit?.data?[index].id);
+                                  print(AppCubit.get(context).isRated);
+                                  navigateTo(
+                                      context,
+                                      PackageDetailsScreen(
+                                        packageModel: cubit?.data?[index],
+                                      ));
+                                },
+                                child: buildTrainItem(
+                                    context,
+                                    model: cubit?.data?[index],
+                                    price: cubit?.data?[index].price,
+                                    rate: double.parse(AppCubit.get(context)
+                                            .packagesModel
+                                            ?.data?[index]
+                                            .ratesAvgRate ??
+                                        '1'),
+                                    AppCubit.get(context)
+                                        .packagesModel
+                                        ?.data?[index]
+                                        .name,
+                                    AppCubit.get(context)
+                                        .packagesModel
+                                        ?.data?[index]
+                                        .img,
+                                    true,
+                                    false),
+                              ),
                           separatorBuilder: (context, index) => const SizedBox(
                                 height: 1,
                               ),
@@ -109,7 +123,7 @@ class PackagesScreen extends StatelessWidget {
                   ),
                 )
               ]),
-              buildSliderItem(220, 5),
+              buildSliderItem(screenHight > 780 ? 220 : 170, 5),
             ],
           ),
         );

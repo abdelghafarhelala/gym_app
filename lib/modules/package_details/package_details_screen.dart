@@ -13,7 +13,6 @@ import 'package:gym_app/shared/colors.dart';
 import 'package:gym_app/shared/components/components.dart';
 import 'package:gym_app/shared/const.dart';
 
-var noteController = TextEditingController();
 double rateNumber = 0.0;
 
 class PackageDetailsScreen extends StatelessWidget {
@@ -45,340 +44,379 @@ class PackageDetailsScreen extends StatelessWidget {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           extendBodyBehindAppBar: true,
-          body: AnnotatedRegion<SystemUiOverlayStyle>(
-            value: const SystemUiOverlayStyle(
-              // For Android.
-              // Use [light] for white status bar and [dark] for black status bar.
-              // statusBarIconBrightness: Brightness.dark,
-              statusBarColor: Colors.transparent,
-              // For iOS.
-              // Use [dark] for white status bar and [light] for black status bar.
-              // statusBarBrightness: Brightness.dark,
-            ),
-            child: Column(
-              children: [
-                Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    Stack(
-                      alignment: Alignment.topCenter,
-                      children: [
-                        Container(
-                            height: screenHight,
-                            width: double.infinity,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30),
-                                  topRight: Radius.circular(30)),
-                              color: Colors.white,
-                            )),
-                        Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.zero,
-                              margin: EdgeInsets.zero,
-
-                              // height: screenHight / 2.7,
-                              height: screenHight / 2.9,
+          body: ConditionalBuilder(
+            condition: state is! AppGetUserRateLoadingState,
+            fallback: (context) => Center(child: CircularProgressIndicator()),
+            builder: (context) => AnnotatedRegion<SystemUiOverlayStyle>(
+              value: const SystemUiOverlayStyle(
+                // For Android.
+                // Use [light] for white status bar and [dark] for black status bar.
+                // statusBarIconBrightness: Brightness.dark,
+                statusBarColor: Colors.transparent,
+                // For iOS.
+                // Use [dark] for white status bar and [light] for black status bar.
+                // statusBarBrightness: Brightness.dark,
+              ),
+              child: Column(
+                children: [
+                  Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      Stack(
+                        alignment: Alignment.topCenter,
+                        children: [
+                          Container(
+                              height: screenHight,
                               width: double.infinity,
                               decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          'https://img.freepik.com/premium-photo/young-ripped-man-bodybuilder-with-perfect-abs-shoulders-biceps-triceps-chest-posing-with-dumbbell_136403-1032.jpg?size=626&ext=jpg&uid=R76996913&ga=GA1.2.1634405249.1648830357'),
-                                      fit: BoxFit.cover)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 40, horizontal: 10),
-                              child: IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.arrow_back,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30)),
+                                color: Colors.white,
+                              )),
+                          Stack(
+                            alignment: Alignment.topRight,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.zero,
+                                margin: EdgeInsets.zero,
+
+                                // height: screenHight / 2.7,
+                                height: screenHight / 2.9,
+                                width: double.infinity,
+                                decoration: const BoxDecoration(
                                     color: Colors.white,
-                                    size: 30,
-                                  )),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                    Container(
-                      // padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      height: screenHight / 1.37,
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30)),
-                        color: Colors.white,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        packageModel?.name ?? '',
-                                        style: const TextStyle(
-                                            fontSize: 24,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w800),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    if (token != null)
-                                      IconButton(
-                                          onPressed: () {
-                                            AppCubit.get(context).makeFavorite(
-                                                type: 'package',
-                                                id: packageModel!.id!);
-                                          },
-                                          icon: Icon(
-                                            Icons.favorite,
-                                            size: 30,
-                                            color: (AppCubit.get(context)
-                                                            .favorites[
-                                                        packageModel?.id]) ==
-                                                    true
-                                                ? primaryColor
-                                                : Colors.grey[300],
-                                          ))
-                                  ],
-                                ),
-                                // const SizedBox(
-                                //   height: 5,
-                                // ),
-                                Row(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'تقييم الباقة',
-                                          style: TextStyle(color: Colors.blue),
-                                        ),
-                                        const SizedBox(
-                                          height: 3,
-                                        ),
-                                        RatingBar.builder(
-                                          itemSize: 18,
-                                          initialRating: double.parse(
-                                              packageModel?.ratesAvgRate ??
-                                                  '1'),
-                                          ignoreGestures: true,
-                                          minRating: 1,
-                                          direction: Axis.horizontal,
-                                          allowHalfRating: false,
-                                          itemCount: 5,
-                                          itemPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 4.0),
-                                          itemBuilder: (context, _) =>
-                                              const Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                          ),
-                                          onRatingUpdate: (rating) {
-                                            print(rating);
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                    const Spacer(),
-                                    if (token != null)
-                                      MaterialButton(
-                                        color: primaryColor,
-                                        onPressed: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => buildDialog(
-                                                context, packageModel!.id!),
-                                          );
-                                        },
-                                        child: const Text('قيم الباقة',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            )),
-                                      ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'عدد التقييمات  :  ${packageModel?.ratesCount ?? 0}',
-                                  style: TextStyle(color: Colors.green),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                const Text(
-                                  '  حافظ علي رشاقة جسمك',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w800),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                          color: primaryColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: const Icon(
-                                        Icons.price_change,
-                                        color: Colors.white,
-                                        size: 25,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'جنيه',
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        Text(
-                                          packageModel?.price.toString() ?? '',
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      width: 100,
-                                    ),
-                                    Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                          color: primaryColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: const Icon(
-                                        Icons.numbers,
-                                        color: Colors.white,
-                                        size: 25,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'مشترك',
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        Text(
-                                          packageModel?.trainCount.toString() ??
-                                              '',
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 25,
-                                ),
-                                const Text(
-                                  'التمارين الموجوده',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                              child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
-                            child: ListView.separated(
-                                physics: BouncingScrollPhysics(),
-                                itemBuilder: (context, index) => buildTrainItem(
-                                    context,
-                                    packageModel?.child?[index].trainings
-                                            ?.parent?.name ??
-                                        '',
-                                    packageModel
-                                        ?.child?[index].trainings?.parent?.img,
-                                    true,
-                                    true,
-                                    sessionNum: packageModel?.child?[index]
-                                            .trainings?.sessionNum ??
-                                        '0'),
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(
-                                      height: 1,
-                                    ),
-                                itemCount: packageModel?.child?.length ?? 0),
-                          )),
-                          if (token != null)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 3),
-                              child: ConditionalBuilder(
-                                condition: state is! AppMakeRequestLoadingState,
-                                fallback: (context) => const Center(
-                                    child: CircularProgressIndicator()),
-                                builder: (context) => defaultButton(
-                                    height: 50,
-                                    onPress: () {
-                                      AppCubit.get(context).makeRequest(
-                                          type: 'package',
-                                          id: packageModel?.id.toString() ??
-                                              '');
-                                    },
-                                    text: 'تقديم طلب'),
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                            'https://img.freepik.com/premium-photo/young-ripped-man-bodybuilder-with-perfect-abs-shoulders-biceps-triceps-chest-posing-with-dumbbell_136403-1032.jpg?size=626&ext=jpg&uid=R76996913&ga=GA1.2.1634405249.1648830357'),
+                                        fit: BoxFit.cover)),
                               ),
-                            ),
-                          const SizedBox(
-                            height: 10,
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 40, horizontal: 10),
+                                child: IconButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(
+                                      Icons.arrow_back,
+                                      color: Colors.white,
+                                      size: 30,
+                                    )),
+                              )
+                            ],
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      Container(
+                        // padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        height: screenHight / 1.37,
+                        width: double.infinity,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30)),
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          packageModel?.name ?? '',
+                                          style: const TextStyle(
+                                              fontSize: 24,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w800),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      if (token != null)
+                                        IconButton(
+                                            onPressed: () {
+                                              AppCubit.get(context)
+                                                  .makeFavorite(
+                                                      type: 'package',
+                                                      id: packageModel!.id!);
+                                            },
+                                            icon: Icon(
+                                              Icons.favorite,
+                                              size: 30,
+                                              color: (AppCubit.get(context)
+                                                              .favorites[
+                                                          packageModel?.id]) ==
+                                                      true
+                                                  ? primaryColor
+                                                  : Colors.grey[300],
+                                            ))
+                                    ],
+                                  ),
+                                  // const SizedBox(
+                                  //   height: 5,
+                                  // ),
+                                  Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'تقييم الباقة',
+                                            style:
+                                                TextStyle(color: Colors.blue),
+                                          ),
+                                          const SizedBox(
+                                            height: 3,
+                                          ),
+                                          RatingBar.builder(
+                                            itemSize: 18,
+                                            initialRating: double.parse(
+                                                packageModel?.ratesAvgRate ??
+                                                    '1'),
+                                            ignoreGestures: true,
+                                            minRating: 1,
+                                            direction: Axis.horizontal,
+                                            allowHalfRating: false,
+                                            itemCount: 5,
+                                            itemPadding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 4.0),
+                                            itemBuilder: (context, _) =>
+                                                const Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ),
+                                            onRatingUpdate: (rating) {
+                                              print(rating);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      if (token != null)
+                                        MaterialButton(
+                                          color: primaryColor,
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => buildDialog(
+                                                  context, packageModel!.id!),
+                                            );
+                                          },
+                                          child: Text(
+                                              AppCubit.get(context).isRated
+                                                  ? 'عرض تقييمي'
+                                                  : 'قيم الباقة',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              )),
+                                        ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    'عدد التقييمات  :  ${packageModel?.ratesCount ?? 0}',
+                                    style: TextStyle(color: Colors.green),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  // const Text(
+                                  //   '  حافظ علي رشاقة جسمك',
+                                  //   style: TextStyle(
+                                  //       fontSize: 17,
+                                  //       color: Colors.grey,
+                                  //       fontWeight: FontWeight.w800),
+                                  // ),
+                                  Container(
+                                    color: Colors.grey[300],
+                                    width: double.infinity,
+                                    height: 1,
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                            color: primaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: const Icon(
+                                          Icons.price_change,
+                                          color: Colors.white,
+                                          size: 25,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'جنيه',
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          Text(
+                                            packageModel?.price.toString() ??
+                                                '',
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 100,
+                                      ),
+                                      Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                            color: primaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: const Icon(
+                                          Icons.numbers,
+                                          color: Colors.white,
+                                          size: 25,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'مشترك',
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          Text(
+                                            packageModel?.trainCount
+                                                    .toString() ??
+                                                '',
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 25,
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        'التمارين ',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      const Text(
+                                        'الموجوده ',
+                                        style: TextStyle(
+                                            color: primaryColor,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      //الموجوده
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                                child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                              child: ListView.separated(
+                                  physics: BouncingScrollPhysics(),
+                                  itemBuilder: (context, index) => InkWell(
+                                        onTap: () {
+                                          AppCubit.get(context).currentIndex =
+                                              3;
+                                          navigateTo(context, LayoutScreen());
+                                        },
+                                        child: buildTrainItem(
+                                            context,
+                                            packageModel?.child?[index]
+                                                    .trainings?.parent?.name ??
+                                                '',
+                                            packageModel?.child?[index]
+                                                .trainings?.parent?.img,
+                                            true,
+                                            true,
+                                            sessionNum: packageModel
+                                                    ?.child?[index]
+                                                    .trainings
+                                                    ?.sessionNum ??
+                                                '0'),
+                                      ),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                        height: 1,
+                                      ),
+                                  itemCount: packageModel?.child?.length ?? 0),
+                            )),
+                            if (token != null)
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 3),
+                                child: ConditionalBuilder(
+                                  condition:
+                                      state is! AppMakeRequestLoadingState,
+                                  fallback: (context) => const Center(
+                                      child: CircularProgressIndicator()),
+                                  builder: (context) => defaultButton(
+                                      height: 50,
+                                      onPress: () {
+                                        AppCubit.get(context).makeRequest(
+                                            type: 'package',
+                                            id: packageModel?.id.toString() ??
+                                                '');
+                                      },
+                                      text: 'تقديم طلب'),
+                                ),
+                              ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -420,37 +458,66 @@ class PackageDetailsScreen extends StatelessWidget {
                     // const SizedBox(
                     //   height: 20,
                     // ),
-                    Text('يسعدنا تقييمك',
+                    Text(
+                        AppCubit.get(context).isRated == true
+                            ? ' تقييمك'
+                            : 'يسعدنا تقييمك',
                         style: Theme.of(context).textTheme.headline1),
                     const SizedBox(
                       height: 20,
                     ),
-                    RatingBar.builder(
-                      itemSize: 28,
-                      initialRating: 1,
-                      // ignoreGestures: true,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      allowHalfRating: false,
-                      itemCount: 5,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                        // color: primaryColor,
+                    if (AppCubit.get(context).isRated != true)
+                      RatingBar.builder(
+                        itemSize: 28,
+                        initialRating: 1,
+                        // ignoreGestures: true,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: false,
+                        itemCount: 5,
+                        itemPadding:
+                            const EdgeInsets.symmetric(horizontal: 4.0),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                          // color: primaryColor,
+                        ),
+                        onRatingUpdate: (rating) {
+                          rateNumber = rating;
+                          print(rating);
+                        },
                       ),
-                      onRatingUpdate: (rating) {
-                        rateNumber = rating;
-                        print(rating);
-                      },
-                    ),
+                    if (AppCubit.get(context).isRated == true)
+                      RatingBar.builder(
+                        itemSize: 28,
+                        initialRating:
+                            AppCubit.get(context).rateData.rate.toDouble() ?? 1,
+                        ignoreGestures: true,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: false,
+                        itemCount: 5,
+                        itemPadding:
+                            const EdgeInsets.symmetric(horizontal: 4.0),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                          // color: primaryColor,
+                        ),
+                        onRatingUpdate: (rating) {
+                          print(rating);
+                        },
+                      ),
                     const SizedBox(
                       height: 10,
                     ),
                     Container(
                       height: 60,
                       child: TextFormField(
-                        controller: noteController,
+                        enabled: AppCubit.get(context).isRated == true
+                            ? false
+                            : true,
+                        controller: AppCubit.get(context).noteController,
                         decoration: InputDecoration(
                           label: const Text(
                             'تعليقك',
@@ -466,26 +533,29 @@ class PackageDetailsScreen extends StatelessWidget {
                     const SizedBox(
                       height: 15,
                     ),
-                    ConditionalBuilder(
-                      condition: state is! AppMakeRateLoadingState,
-                      fallback: (context) => const CircularProgressIndicator(),
-                      builder: (context) => MaterialButton(
-                        minWidth: 220,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(9)),
-                        clipBehavior: Clip.antiAlias,
-                        color: primaryColor,
-                        onPressed: () {
-                          AppCubit.get(context).makeRate(
-                              id: id,
-                              rate: rateNumber,
-                              note: noteController.text);
-                        },
-                        child: const Text(' ارسل التقييم',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 18)),
+                    if (AppCubit.get(context).isRated != true)
+                      ConditionalBuilder(
+                        condition: state is! AppMakeRateLoadingState,
+                        fallback: (context) =>
+                            const CircularProgressIndicator(),
+                        builder: (context) => MaterialButton(
+                          minWidth: 220,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(9)),
+                          clipBehavior: Clip.antiAlias,
+                          color: primaryColor,
+                          onPressed: () {
+                            AppCubit.get(context).makeRate(
+                                id: id,
+                                rate: rateNumber,
+                                note:
+                                    AppCubit.get(context).noteController.text);
+                          },
+                          child: const Text(' ارسل التقييم',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18)),
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),

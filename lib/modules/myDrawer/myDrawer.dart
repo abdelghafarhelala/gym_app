@@ -7,6 +7,7 @@ import 'package:gym_app/modules/contact_us/contact_us_screen.dart';
 import 'package:gym_app/modules/layoutScreen/layoutScreen.dart';
 import 'package:gym_app/modules/login/login.dart';
 import 'package:gym_app/modules/plan/Plan_screen.dart';
+import 'package:gym_app/modules/profile/profile_screen.dart';
 import 'package:gym_app/modules/update_profile/update_profile_screen.dart';
 import 'package:gym_app/network/endpoints.dart';
 import 'package:gym_app/shared/appCubit/app_cubit.dart';
@@ -24,7 +25,7 @@ class MyDrawer extends StatelessWidget {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
         if (state is AppLogOutSuccessState) {
-          showToast(text: 'LogOut Successfully', state: ToastStates.success);
+          showToast(text: 'تم تسجيل الخروج بنجاح', state: ToastStates.success);
           navigateAndFinish(context, LoginScreen());
         }
       },
@@ -48,43 +49,52 @@ class MyDrawer extends StatelessWidget {
             child: Stack(
               alignment: Alignment.topLeft,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (userData?.data?.profilePhotoPath == null)
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        height: 70,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwnYnwftDUSjsQmLQvMBZ2pwDXhAJiIdfKvg&usqp=CAU'),
-                            )),
+                InkWell(
+                  onTap: () {
+                    AppCubit.get(context).currentIndex = 4;
+                    AppCubit.get(context).changeAppNav(4);
+                    navigateTo(context, LayoutScreen());
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (userData?.data?.profilePhotoPath == null)
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          height: 70,
+                          decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwnYnwftDUSjsQmLQvMBZ2pwDXhAJiIdfKvg&usqp=CAU'),
+                              )),
+                        ),
+                      if (userData?.data?.profilePhotoPath != null)
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          height: 70,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    '$imageLink${userData?.data?.profilePhotoPath}'),
+                              )),
+                        ),
+                      Text(
+                        userData?.data?.name ?? 'User Name',
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 21),
                       ),
-                    if (userData?.data?.profilePhotoPath != null)
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        height: 70,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  '$imageLink${userData?.data?.profilePhotoPath}'),
-                            )),
+                      const SizedBox(
+                        height: 5,
                       ),
-                    Text(
-                      userData?.data?.name ?? 'User Name',
-                      style: const TextStyle(color: Colors.white, fontSize: 21),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      userData?.data?.email ?? 'Email',
-                      style: const TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                  ],
+                      Text(
+                        userData?.data?.email ?? 'Email',
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   width: 5,
@@ -183,7 +193,7 @@ class MyDrawer extends StatelessWidget {
             AppCubit.get(context).currentIndex = 3;
             navigateTo(context, widget);
           } else if (text == 'الرئيسية') {
-            AppCubit.get(context).currentIndex = 0;
+            AppCubit.get(context).currentIndex = 2;
             navigateTo(context, widget);
           } else {
             navigateTo(context, widget);

@@ -15,6 +15,7 @@ class TrainingAndOffersScreen extends StatelessWidget {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
+        double screenHight = MediaQuery.of(context).size.height;
         var cubit = AppCubit.get(context).trainingOffersModel?.data;
         return ConditionalBuilder(
           condition:
@@ -108,7 +109,7 @@ class TrainingAndOffersScreen extends StatelessWidget {
                   ),
                 )
               ]),
-              buildSliderItem(220, 5),
+              buildSliderItem(screenHight > 780 ? 220 : 170, 5),
             ],
           ),
         );

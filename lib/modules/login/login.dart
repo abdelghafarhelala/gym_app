@@ -74,201 +74,205 @@ class LoginScreen extends StatelessWidget {
                 // Use [dark] for white status bar and [light] for black status bar.
                 statusBarBrightness: Brightness.dark,
               ),
-              child: Center(
-                child: Form(
-                  key: AppCubit.get(context).formKeyLogin,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          children: [
-                            SizedBox(height: screenHeight / 22),
-                            Stack(
-                              alignment: Alignment.topLeft,
-                              children: [
-                                Image.asset(
-                                  'assets/images/login.png',
-                                  height: screenHeight / 4,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                                TextButton(
-                                    onPressed: () {
-                                      AppCubit.get(context).currentIndex = 2;
-                                      navigateTo(context, LayoutScreen());
-                                    },
-                                    child: const Text(
-                                      'الصفحه الرئيسيه',
-                                      style: TextStyle(fontSize: 18),
-                                    ))
-                              ],
-                            ),
-                            SizedBox(
-                              height: screenHeight / 40,
-                            ),
-                            const Text(
-                              'تسجيل الدخول',
-                              style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.w700),
-                            ),
-
-                            // Text('تسجيل الدخول ',
-                            //     style: Theme.of(context).textTheme.bodyText1),
-                            SizedBox(
-                              height: screenHeight / 57,
-                            ),
-                            Card(
-                              shape: BeveledRectangleBorder(
-                                borderRadius: BorderRadius.circular(4.0),
-                              ),
-                              elevation: 1.5,
-                              child: defaultTextField(
-                                  lable: 'البريد الإلكتروني',
-                                  controller: phoneController,
-                                  prefix: Icons.email_outlined,
-                                  validate: (String value) {
-                                    if (value.isEmpty) {
-                                      return 'يجب لن تدخل البريد الإلكتروني';
-                                    }
-                                  },
-                                  context: context,
-                                  type: TextInputType.emailAddress),
-                            ),
-                            SizedBox(
-                              height: screenHeight / 68,
-                            ),
-                            Card(
-                              shape: BeveledRectangleBorder(
-                                borderRadius: BorderRadius.circular(4.0),
-                              ),
-                              elevation: 1.5,
-                              child: defaultTextField(
-                                  controller: passwordController,
-                                  lable: 'كلمه السر ',
-                                  prefix: Icons.lock_outline,
-                                  suffix: LoginCubit.get(context).suffix,
-                                  suffixPressed: () {
-                                    LoginCubit.get(context)
-                                        .changePasswordVisibility();
-                                  },
-                                  isSecure: LoginCubit.get(context).isPass,
-                                  validate: (String value) {
-                                    if (value.isEmpty) {
-                                      return 'يجب ان تدخل كلمة السر ';
-                                    } else {
-                                      bool result = validatePassword(value);
-                                      // if (result) {
-                                      //   if (value.length < 8) {
-                                      //     return " Password should at least 8 character";
-                                      //   }
-                                      // } else {
-                                      //   return "Password should contain Capital,small letter ,\n Number & Special character";
-                                      // }
-                                    }
-                                  },
-                                  context: context,
-                                  type: TextInputType.visiblePassword),
-                            ),
-                            SizedBox(
-                              height: screenHeight / 68,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextButton(
-                                    onPressed: () {
-                                      navigateTo(
-                                          context, ForgetPasswordScreen());
-                                    },
-                                    child: Text(
-                                      'نسيت كلمة السر ؟',
-                                      style: TextStyle(
-                                        color: HexColor('#707070'),
-                                        fontSize: 16,
-                                      ),
-                                    ))
-                              ],
-                            ),
-                            SizedBox(
-                              height: screenHeight / 70,
-                            ),
-                            ConditionalBuilder(
-                              condition: state is! LoginLoadingState,
-                              builder: (context) => defaultButton(
-                                  fontSize: 22,
-                                  height: screenHeight / 18,
-                                  onPress: () {
-                                    if (AppCubit.get(context)
-                                        .formKeyLogin
-                                        .currentState!
-                                        .validate()) {
-                                      LoginCubit.get(context).userLogin(
-                                          phone: phoneController.text,
-                                          password: passwordController.text,
-                                          context: context);
-                                    } else {}
-                                  },
-                                  text: 'تسجيل الدخول'),
-                              fallback: (context) => const Center(
-                                  child: CircularProgressIndicator()),
-                            ),
-
-                            SizedBox(
-                              height: screenHeight / 35,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    width: 40,
-                                    height: 1,
-                                    color: Colors.grey,
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Form(
+                    key: AppCubit.get(context).formKeyLogin,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            children: [
+                              SizedBox(height: screenHeight / 22),
+                              Stack(
+                                alignment: Alignment.topLeft,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/login.png',
+                                    height: screenHeight / 4,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
                                   ),
+                                  TextButton(
+                                      onPressed: () {
+                                        AppCubit.get(context).currentIndex = 2;
+                                        navigateTo(context, LayoutScreen());
+                                      },
+                                      child: const Text(
+                                        'الصفحه الرئيسيه',
+                                        style: TextStyle(fontSize: 18),
+                                      ))
+                                ],
+                              ),
+                              SizedBox(
+                                height: screenHeight / 40,
+                              ),
+                              const Text(
+                                'تسجيل الدخول',
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.w700),
+                              ),
+
+                              // Text('تسجيل الدخول ',
+                              //     style: Theme.of(context).textTheme.bodyText1),
+                              SizedBox(
+                                height: screenHeight / 57,
+                              ),
+                              Card(
+                                shape: BeveledRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0),
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 30),
-                                  child: Text(
-                                    'أو',
-                                    style: TextStyle(
-                                      fontSize: 18,
+                                elevation: 1.5,
+                                child: defaultTextField(
+                                    lable: 'البريد الإلكتروني',
+                                    controller: phoneController,
+                                    prefix: Icons.email_outlined,
+                                    validate: (String value) {
+                                      if (value.isEmpty) {
+                                        return 'البريد الإلكتروني مطلوب';
+                                      }
+                                    },
+                                    context: context,
+                                    type: TextInputType.emailAddress),
+                              ),
+                              SizedBox(
+                                height: screenHeight / 68,
+                              ),
+                              Card(
+                                shape: BeveledRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                                elevation: 1.5,
+                                child: defaultTextField(
+                                    controller: passwordController,
+                                    lable: 'كلمه السر ',
+                                    prefix: Icons.lock_outline,
+                                    suffix: LoginCubit.get(context).suffix,
+                                    suffixPressed: () {
+                                      LoginCubit.get(context)
+                                          .changePasswordVisibility();
+                                    },
+                                    isSecure: LoginCubit.get(context).isPass,
+                                    validate: (String value) {
+                                      if (value.isEmpty) {
+                                        return ' كلمة السر مطلوبة ';
+                                      } else {
+                                        bool result = validatePassword(value);
+                                        // if (result) {
+                                        //   if (value.length < 8) {
+                                        //     return " Password should at least 8 character";
+                                        //   }
+                                        // } else {
+                                        //   return "Password should contain Capital,small letter ,\n Number & Special character";
+                                        // }
+                                      }
+                                    },
+                                    context: context,
+                                    type: TextInputType.visiblePassword),
+                              ),
+                              SizedBox(
+                                height: screenHeight / 68,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        navigateTo(
+                                            context, ForgetPasswordScreen());
+                                      },
+                                      child: Text(
+                                        'نسيت كلمة السر ؟',
+                                        style: TextStyle(
+                                          color: HexColor('#707070'),
+                                          fontSize: 16,
+                                        ),
+                                      ))
+                                ],
+                              ),
+                              SizedBox(
+                                height: screenHeight / 70,
+                              ),
+                              ConditionalBuilder(
+                                condition: state is! LoginLoadingState,
+                                builder: (context) => defaultButton(
+                                    fontSize: 22,
+                                    height: screenHeight / 18,
+                                    onPress: () {
+                                      if (AppCubit.get(context)
+                                          .formKeyLogin
+                                          .currentState!
+                                          .validate()) {
+                                        LoginCubit.get(context).userLogin(
+                                            phone: phoneController.text,
+                                            password: passwordController.text,
+                                            context: context);
+                                      } else {}
+                                    },
+                                    text: 'تسجيل الدخول'),
+                                fallback: (context) => const Center(
+                                    child: CircularProgressIndicator()),
+                              ),
+
+                              SizedBox(
+                                height: screenHeight / 35,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      width: 40,
+                                      height: 1,
+                                      color: Colors.grey,
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    width: 40,
-                                    height: 1,
-                                    color: Colors.grey,
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 30),
+                                    child: Text(
+                                      'أو',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: screenHeight / 30),
-                            MaterialButton(
-                              onPressed: () {
-                                navigateTo(context, RegisterScreen());
-                              },
-                              hoverColor: primaryColor,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(27.0)),
-                                  side: BorderSide(color: primaryColor)),
-                              color: Colors.white,
-                              minWidth: double.infinity,
-                              height: screenHeight / 18,
-                              textColor: Colors.black,
-                              child: const Text(
-                                ' حساب جديد',
-                                style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.w300),
+                                  Expanded(
+                                    child: Container(
+                                      width: 40,
+                                      height: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
+                              SizedBox(height: screenHeight / 30),
+                              MaterialButton(
+                                onPressed: () {
+                                  navigateTo(context, RegisterScreen());
+                                },
+                                hoverColor: primaryColor,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(27.0)),
+                                    side: BorderSide(color: primaryColor)),
+                                color: Colors.white,
+                                minWidth: double.infinity,
+                                height: screenHeight / 18,
+                                textColor: Colors.black,
+                                child: const Text(
+                                  ' حساب جديد',
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w300),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

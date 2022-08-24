@@ -21,6 +21,7 @@ import 'package:gym_app/models/training/training_model.dart';
 import 'package:gym_app/models/training_offers/training_offers_model.dart';
 import 'package:gym_app/models/update_profile/update_profile_model.dart';
 import 'package:gym_app/models/userModel/userModel.dart';
+import 'package:gym_app/models/user_rates_model/user_rates_model.dart';
 import 'package:gym_app/modules/home/home_screen.dart';
 import 'package:gym_app/modules/login/login.dart';
 import 'package:gym_app/modules/packages/packages_screen.dart';
@@ -233,6 +234,7 @@ class AppCubit extends Cubit<AppStates> {
         emit(AppLogOutSuccessState());
       }
     });
+    token = null;
   }
 
   SendEmailModel? sendEmailModel;
@@ -281,7 +283,7 @@ class AppCubit extends Cubit<AppStates> {
     required String confirmNewPassword,
   }) {
     emit(AppChangePasswordLoadingState());
-    DioHelper.putData(url: changePasswordUrl, token: token, data: {
+    DioHelper.postData(url: changePasswordUrl, token: token, data: {
       'old_password': oldPassword,
       'new_password': newPassword,
       'c_password': confirmNewPassword,
@@ -307,6 +309,7 @@ class AppCubit extends Cubit<AppStates> {
         favorites.addAll(
             {element.id!: element.favorites!.length > 0 ? true : false});
       });
+      print(favorites);
       emit(AppGetPackagesSuccessState(packagesModel));
     }).catchError((error) {
       emit(AppGetPackagesErrorState());
@@ -354,13 +357,40 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
+  //get user rate
+  var noteController = TextEditingController();
+  var rateData;
+  bool isRated = false;
+  UserRatesModel? userRatesModel;
+  void getUserRateData({int? id}) {
+    isRated = false;
+    noteController.text = '';
+    emit(AppGetUserRateLoadingState());
+    DioHelper.getData(url: getRateUrl, token: token).then((value) {
+      userRatesModel = UserRatesModel.fromJson(value.data);
+      userRatesModel?.data?.forEach((element) {
+        if (element.ratedInId == id) {
+          print('yes yes yes');
+          isRated = true;
+          rateData = element;
+          noteController.text = element.notes ?? 'لايوجد تعليق';
+        }
+      });
+      emit(AppGetUserRateSuccessState(userRatesModel));
+    }).catchError((error) {
+      emit(AppGetUserRateErrorState());
+      print(error.toString());
+    });
+  }
+
   int myTrainingIndex = 0;
 
 //get food advices
   FoodAdvices? foodAdvices;
   void getFoodAdvicesData() {
     emit(AppGetFoodAdvicesLoadingState());
-    DioHelper.getDataWithoutToken(url: foodAdvicesUrl).then((value) {
+    DioHelper.getDataWithoutToken(url: foodAdvicesUrl, token: token)
+        .then((value) {
       foodAdvices = FoodAdvices.fromJson(value.data);
       emit(AppGetFoodAdvicesSuccessState(foodAdvices));
       getPackagesData();
@@ -374,7 +404,8 @@ class AppCubit extends Cubit<AppStates> {
   TrainAdvicesModel? trainAdvicesModel;
   void getTrainAdvicesData() {
     emit(AppGetTrainAdvicesLoadingState());
-    DioHelper.getDataWithoutToken(url: trainAdvicesUrl).then((value) {
+    DioHelper.getDataWithoutToken(url: trainAdvicesUrl, token: token)
+        .then((value) {
       trainAdvicesModel = TrainAdvicesModel.fromJson(value.data);
 
       emit(AppGetTrainAdvicesSuccessState(trainAdvicesModel));

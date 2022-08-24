@@ -252,7 +252,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         );
                                       } else {}
                                     },
-                                    text: 'Register'),
+                                    text: 'انشاء حساب'),
                                 fallback: (context) => const Center(
                                     child: CircularProgressIndicator()),
                               ),

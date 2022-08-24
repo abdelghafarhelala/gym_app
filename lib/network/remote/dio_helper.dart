@@ -31,7 +31,7 @@ class DioHelper {
   }) async {
     dio!.options.headers = {
       'lang': lang,
-      'Authorization': token ?? '',
+      'Authorization': token == null ? '' : 'Bearer ${token}',
       'Content-Type': 'application/json',
     };
     return await dio!.get(url, queryParameters: query);
@@ -65,7 +65,7 @@ class DioHelper {
   }) async {
     dio!.options.headers = {
       'lang': lang,
-      'Authorization': token ?? '',
+      'Authorization': token == null ? '' : 'Bearer ${token}',
       'Content-Type': 'application/json',
     };
     return await dio!.post(

@@ -9,6 +9,7 @@ const String logOutUrl = 'logout';
 const String packageUrl = 'packages/ar/0';
 const String favoriteUrl = 'user_favorite';
 const String rateUrl = 'user_rates';
+const String getRateUrl = 'user_rates';
 const String changePasswordUrl = 'change_password';
 const String trainAdvicesUrl = 'categories/t/ar/0/0';
 const String contactUsUrl = 'contact_us';

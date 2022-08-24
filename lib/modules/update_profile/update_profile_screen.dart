@@ -104,7 +104,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                     ?.data?.profilePhotoPath ==
                                                 null
                                             ? NetworkImage(
-                                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcGJegujCz3neLg3btfiVRfmV4dg52BBd38g&usqp=CAU')
+                                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwnYnwftDUSjsQmLQvMBZ2pwDXhAJiIdfKvg&usqp=CAU')
                                             : NetworkImage(
                                                 '$imageLink${model?.data?.profilePhotoPath}'),
                                       ),
@@ -212,12 +212,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 borderRadius: BorderRadius.circular(4.0),
                               ),
                               elevation: 1.5,
-                              child: defaultTextFieldWithCustomIconImage(
+                              child: defaultTextField(
                                   lable: 'الطول',
                                   controller: AppCubit.get(context)
                                       .updateHightController,
-                                  prefix: const ImageIcon(
-                                      AssetImage("assets/images/height.png")),
+                                  prefix: Icons.height,
                                   validate: (String value) {
                                     if (value.isEmpty) {
                                       return 'يجب أن تدخل الطول';
@@ -234,12 +233,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 borderRadius: BorderRadius.circular(4.0),
                               ),
                               elevation: 1.5,
-                              child: defaultTextFieldWithCustomIconImage(
+                              child: defaultTextField(
                                   lable: 'الوزن',
                                   controller: AppCubit.get(context)
                                       .updateWightController,
-                                  prefix: const ImageIcon(
-                                      AssetImage("assets/images/height.png")),
+                                  prefix: Icons.balance,
                                   validate: (String value) {
                                     if (value.isEmpty) {
                                       return 'يجب أن تدخل الوزن';
@@ -262,11 +260,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       AppCubit.get(context).updateIllController,
                                   prefix: const ImageIcon(
                                       AssetImage("assets/images/sick.png")),
-                                  validate: (String value) {
-                                    if (value.isEmpty) {
-                                      return 'يجب أن تدخل الأمراض';
-                                    }
-                                  },
+                                  validate: (String value) {},
                                   context: context,
                                   type: TextInputType.text),
                             ),
@@ -278,17 +272,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 borderRadius: BorderRadius.circular(4.0),
                               ),
                               elevation: 1.5,
-                              child: defaultTextFieldWithCustomIconImage(
+                              child: defaultTextField(
                                   lable: 'الملاحظات',
                                   controller: AppCubit.get(context)
                                       .updateDetailsController,
-                                  prefix: const ImageIcon(
-                                      AssetImage("assets/images/height.png")),
-                                  validate: (String value) {
-                                    if (value.isEmpty) {
-                                      return 'يجب أن تدخل الملاحظات';
-                                    }
-                                  },
+                                  prefix: Icons.info,
+                                  validate: (String value) {},
                                   context: context,
                                   type: TextInputType.text),
                             ),

@@ -251,163 +251,154 @@ PreferredSizeWidget defaultAppBar(context, String title, isFirst) => AppBar(
 Widget buildTrainItem(
         context, trainD, String? image, bool isPackages, bool isTrain,
         {train, rate, price, model, sessionNum}) =>
-    InkWell(
-      onTap: () {
-        navigateTo(
-            context,
-            PackageDetailsScreen(
-              packageModel: model,
-            ));
-      },
-      child: Stack(
-        alignment: Alignment.topLeft,
-        children: [
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 3),
-              child: SizedBox(
-                height: 130,
-                child: Card(
-                  color: Colors.white,
-                  elevation: 4,
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        if (image == null)
-                          Container(
-                            width: 130,
-                            decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                        'https://img.freepik.com/free-photo/sports-fitness-energy-active-healthy-lifestyle-determined-afro-american-male-wearing-stylish-training-outfit-while-working-out-gym-doing-abdominal-endurance-exercise-sit-ups-curl-ups_343059-448.jpg?size=626&ext=jpg&uid=R76996913&ga=GA1.2.1634405249.1648830357'),
-                                    fit: BoxFit.cover)),
-                          ),
-                        if (image != null)
-                          Container(
-                            width: 130,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage('$imageLink$image'),
-                                    fit: BoxFit.cover)),
-                          ),
-                        const SizedBox(
-                          width: 20,
+    Stack(
+      alignment: Alignment.topLeft,
+      children: [
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            child: SizedBox(
+              height: 130,
+              child: Card(
+                color: Colors.white,
+                elevation: 4,
+                clipBehavior: Clip.antiAlias,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(7)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      if (image == null)
+                        Container(
+                          width: 130,
+                          decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      'https://img.freepik.com/free-photo/sports-fitness-energy-active-healthy-lifestyle-determined-afro-american-male-wearing-stylish-training-outfit-while-working-out-gym-doing-abdominal-endurance-exercise-sit-ups-curl-ups_343059-448.jpg?size=626&ext=jpg&uid=R76996913&ga=GA1.2.1634405249.1648830357'),
+                                  fit: BoxFit.cover)),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                      if (image != null)
+                        Container(
+                          width: 130,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage('$imageLink$image'),
+                                  fit: BoxFit.cover)),
+                        ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            trainD ?? 'لا يوجد اسم',
+                            style: const TextStyle(
+                                fontSize: 19,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          const SizedBox(
+                            height: 3,
+                          ),
+                          if (isPackages == false)
                             Text(
-                              trainD ?? 'لا يوجد اسم',
+                              '${train?.startDate ?? ''}',
                               style: const TextStyle(
-                                  fontSize: 19,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w700),
+                                  fontSize: 17,
+                                  color: primaryColor,
+                                  fontWeight: FontWeight.w600),
                             ),
-                            const SizedBox(
-                              height: 3,
+                          const SizedBox(
+                            height: 3,
+                          ),
+                          if (isPackages == false)
+                            Text(
+                              'منذ ${DateTime.now().difference(DateTime.parse(train!.startDate ?? DateTime.now().toString())).inDays} يوم',
+                              style: const TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500),
                             ),
-                            if (isPackages == false)
-                              Text(
-                                '${train?.startDate ?? ''}',
-                                style: const TextStyle(
-                                    fontSize: 17,
-                                    color: primaryColor,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            const SizedBox(
-                              height: 3,
+                          if (isPackages == true && isTrain == false)
+                            Text(
+                              'السعر : ${price ?? 0} جنيه',
+                              style: const TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500),
                             ),
-                            if (isPackages == false)
-                              Text(
-                                'منذ ${DateTime.now().difference(DateTime.parse(train!.startDate ?? DateTime.now().toString())).inDays} يوم',
-                                style: const TextStyle(
-                                    fontSize: 17,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            if (isPackages == true)
-                              Text(
-                                'السعر : ${price ?? 0} جنيه',
-                                style: const TextStyle(
-                                    fontSize: 17,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            if (isPackages == true && isTrain == false)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RatingBar.builder(
-                                    itemSize: 18,
-                                    initialRating: rate ?? 1,
-                                    ignoreGestures: true,
-                                    minRating: 1,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: false,
-                                    itemCount: 5,
-                                    itemPadding: const EdgeInsets.symmetric(
-                                        horizontal: 4.0),
-                                    itemBuilder: (context, _) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                      // color: primaryColor,
-                                    ),
-                                    onRatingUpdate: (rating) {
-                                      print(rating);
-                                    },
+                          if (isPackages == true && isTrain == false)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RatingBar.builder(
+                                  itemSize: 18,
+                                  initialRating: rate ?? 1,
+                                  ignoreGestures: true,
+                                  minRating: 1,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: false,
+                                  itemCount: 5,
+                                  itemPadding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0),
+                                  itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                    // color: primaryColor,
                                   ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text(
-                                      'عدد التقييمات  :  ${model?.ratesCount ?? 0}',
-                                      style: TextStyle(
-                                          color: Colors.grey, fontSize: 14)),
-                                ],
-                              ),
-                            if (isPackages == true && isTrain == true)
-                              Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    '${sessionNum ?? '0'} حصص',
-                                    style: const TextStyle(
-                                        fontSize: 17,
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
+                                  onRatingUpdate: (rating) {
+                                    print(rating);
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Text(
+                                    'عدد التقييمات  :  ${model?.ratesCount ?? 0}',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 14)),
+                              ],
+                            ),
+                          if (isPackages == true && isTrain == true)
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  '${sessionNum ?? '0'} حصص',
+                                  style: const TextStyle(
+                                      fontSize: 17,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              )),
-          if (isPackages == true && isTrain == false && token != null)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: IconButton(
-                  onPressed: () {
-                    AppCubit.get(context)
-                        .makeFavorite(type: 'package', id: model!.id!);
-                  },
-                  icon: Icon(
-                    Icons.favorite,
-                    size: 30,
-                    color: (AppCubit.get(context).favorites[model?.id]) == true
-                        ? primaryColor
-                        : Colors.grey[300],
-                  )),
-            )
-        ],
-      ),
+              ),
+            )),
+        if (isPackages == true && isTrain == false && token != null)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+                onPressed: () {
+                  AppCubit.get(context)
+                      .makeFavorite(type: 'package', id: model!.id!);
+                },
+                icon: Icon(
+                  Icons.favorite,
+                  size: 30,
+                  color: (AppCubit.get(context).favorites[model?.id]) == true
+                      ? primaryColor
+                      : Colors.grey[300],
+                )),
+          )
+      ],
     );
 
 Widget buildNoItem() => Column(
