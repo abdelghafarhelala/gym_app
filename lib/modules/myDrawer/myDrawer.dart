@@ -138,24 +138,32 @@ class MyDrawer extends StatelessWidget {
               'تواصل معنا',
               ContactUsScreen(),
               index: 1),
-          menuItem(
-              context,
-              'https://cdn-icons-png.flaticon.com/128/3064/3064197.png',
-              'تغيير كلمة السر',
-              ChangePasswordScreen(),
-              index: 2),
-          menuItem(
-              context,
-              'https://cdn-icons-png.flaticon.com/128/5167/5167017.png',
-              'تعديل الشخصية',
-              UpdateProfileScreen(),
-              index: 2),
+          if (token != null)
+            menuItem(
+                context,
+                'https://cdn-icons-png.flaticon.com/128/3064/3064197.png',
+                'تغيير كلمة السر',
+                ChangePasswordScreen(),
+                index: 2),
+          if (token != null)
+            menuItem(
+                context,
+                'https://cdn-icons-png.flaticon.com/128/5167/5167017.png',
+                'تحديث بياناتي',
+                UpdateProfileScreen(),
+                index: 2),
           Spacer(),
           if (token != null)
             menuItem2(
               context,
               Icons.logout,
               ' تسجيل الخروج',
+            ),
+          if (token == null)
+            menuItem2(
+              context,
+              Icons.login,
+              ' تسجيل الدخول',
             ),
         ],
       ),
@@ -229,7 +237,11 @@ class MyDrawer extends StatelessWidget {
     return Material(
       child: InkWell(
         onTap: () {
-          AppCubit.get(context).logOut(context);
+          if (token == null) {
+            navigateTo(context, LoginScreen());
+          } else {
+            AppCubit.get(context).logOut(context);
+          }
         },
         child: Container(
           height: 59,
@@ -243,14 +255,16 @@ class MyDrawer extends StatelessWidget {
                 Expanded(
                     child: Icon(
                   icon,
-                  color: HexColor('#AF4040'),
+                  color: token == null ? Colors.green : HexColor('#AF4040'),
                 )),
                 Expanded(
                     flex: 3,
                     child: Text(
                       text,
                       style: TextStyle(
-                          color: HexColor('#AF4040'),
+                          color: token == null
+                              ? Colors.green
+                              : HexColor('#AF4040'),
                           fontSize: 18,
                           fontWeight: FontWeight.w700),
                     )),

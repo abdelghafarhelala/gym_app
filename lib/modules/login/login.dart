@@ -16,7 +16,6 @@ import 'package:hexcolor/hexcolor.dart';
 
 var phoneController = TextEditingController();
 var passwordController = TextEditingController();
-var formKeyLogin = GlobalKey<FormState>();
 RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
 bool validatePassword(String pass) {
   String _password = pass.trim();
@@ -77,7 +76,7 @@ class LoginScreen extends StatelessWidget {
               ),
               child: Center(
                 child: Form(
-                  key: formKeyLogin,
+                  key: AppCubit.get(context).formKeyLogin,
                   child: Column(
                     children: [
                       Padding(
@@ -85,11 +84,25 @@ class LoginScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             SizedBox(height: screenHeight / 22),
-                            Image.asset(
-                              'assets/images/login.png',
-                              height: screenHeight / 4,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
+                            Stack(
+                              alignment: Alignment.topLeft,
+                              children: [
+                                Image.asset(
+                                  'assets/images/login.png',
+                                  height: screenHeight / 4,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                                TextButton(
+                                    onPressed: () {
+                                      AppCubit.get(context).currentIndex = 2;
+                                      navigateTo(context, LayoutScreen());
+                                    },
+                                    child: const Text(
+                                      'الصفحه الرئيسيه',
+                                      style: TextStyle(fontSize: 18),
+                                    ))
+                              ],
                             ),
                             SizedBox(
                               height: screenHeight / 40,
@@ -186,7 +199,10 @@ class LoginScreen extends StatelessWidget {
                                   fontSize: 22,
                                   height: screenHeight / 18,
                                   onPress: () {
-                                    if (formKeyLogin.currentState!.validate()) {
+                                    if (AppCubit.get(context)
+                                        .formKeyLogin
+                                        .currentState!
+                                        .validate()) {
                                       LoginCubit.get(context).userLogin(
                                           phone: phoneController.text,
                                           password: passwordController.text,

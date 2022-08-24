@@ -30,7 +30,7 @@ void main() async {
     if (token != null) {
       startWidget = LayoutScreen();
     } else {
-      startWidget = LoginScreen();
+      startWidget = LayoutScreen();
     }
   } else {
     startWidget = OnBoardingScreen();
@@ -60,6 +60,7 @@ class MyApp extends StatelessWidget {
         ..getFoodAdvicesData()
         ..getTrainAdvicesData()
         ..getUserData()
+        ..getTrainingData()
         ..getTrainAndOffersData(),
       child: BlocConsumer<AppCubit, AppStates>(
           listener: (context, state) {},

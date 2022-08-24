@@ -11,6 +11,7 @@ import 'package:gym_app/shared/appCubit/app_cubit.dart';
 import 'package:gym_app/shared/appCubit/app_states.dart';
 import 'package:gym_app/shared/colors.dart';
 import 'package:gym_app/shared/components/components.dart';
+import 'package:gym_app/shared/const.dart';
 
 var noteController = TextEditingController();
 double rateNumber = 0.0;
@@ -137,22 +138,23 @@ class PackageDetailsScreen extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    IconButton(
-                                        onPressed: () {
-                                          AppCubit.get(context).makeFavorite(
-                                              type: 'package',
-                                              id: packageModel!.id!);
-                                        },
-                                        icon: Icon(
-                                          Icons.favorite,
-                                          size: 30,
-                                          color:
-                                              (AppCubit.get(context).favorites[
-                                                          packageModel?.id]) ==
-                                                      true
-                                                  ? primaryColor
-                                                  : Colors.grey[300],
-                                        ))
+                                    if (token != null)
+                                      IconButton(
+                                          onPressed: () {
+                                            AppCubit.get(context).makeFavorite(
+                                                type: 'package',
+                                                id: packageModel!.id!);
+                                          },
+                                          icon: Icon(
+                                            Icons.favorite,
+                                            size: 30,
+                                            color: (AppCubit.get(context)
+                                                            .favorites[
+                                                        packageModel?.id]) ==
+                                                    true
+                                                ? primaryColor
+                                                : Colors.grey[300],
+                                          ))
                                   ],
                                 ),
                                 // const SizedBox(
@@ -196,20 +198,21 @@ class PackageDetailsScreen extends StatelessWidget {
                                       ],
                                     ),
                                     const Spacer(),
-                                    MaterialButton(
-                                      color: primaryColor,
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) => buildDialog(
-                                              context, packageModel!.id!),
-                                        );
-                                      },
-                                      child: const Text('قيم الباقة',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                          )),
-                                    ),
+                                    if (token != null)
+                                      MaterialButton(
+                                        color: primaryColor,
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => buildDialog(
+                                                context, packageModel!.id!),
+                                          );
+                                        },
+                                        child: const Text('قيم الباقة',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            )),
+                                      ),
                                   ],
                                 ),
                                 const SizedBox(
@@ -348,23 +351,25 @@ class PackageDetailsScreen extends StatelessWidget {
                                     ),
                                 itemCount: packageModel?.child?.length ?? 0),
                           )),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 3),
-                            child: ConditionalBuilder(
-                              condition: state is! AppMakeRequestLoadingState,
-                              fallback: (context) => const Center(
-                                  child: CircularProgressIndicator()),
-                              builder: (context) => defaultButton(
-                                  height: 50,
-                                  onPress: () {
-                                    AppCubit.get(context).makeRequest(
-                                        type: 'package',
-                                        id: packageModel?.id.toString() ?? '');
-                                  },
-                                  text: 'تقديم طلب'),
+                          if (token != null)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 3),
+                              child: ConditionalBuilder(
+                                condition: state is! AppMakeRequestLoadingState,
+                                fallback: (context) => const Center(
+                                    child: CircularProgressIndicator()),
+                                builder: (context) => defaultButton(
+                                    height: 50,
+                                    onPress: () {
+                                      AppCubit.get(context).makeRequest(
+                                          type: 'package',
+                                          id: packageModel?.id.toString() ??
+                                              '');
+                                    },
+                                    text: 'تقديم طلب'),
+                              ),
                             ),
-                          ),
                           const SizedBox(
                             height: 10,
                           ),

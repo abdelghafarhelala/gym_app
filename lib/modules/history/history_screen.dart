@@ -7,18 +7,14 @@ import 'package:gym_app/shared/appCubit/app_states.dart';
 import 'package:gym_app/shared/colors.dart';
 import 'package:gym_app/shared/components/components.dart';
 
-class MyTrainingScreen extends StatelessWidget {
-  const MyTrainingScreen(
-      {Key? key,
-      required this.trainings,
-      required this.packages,
-      required this.trainingPlan,
-      required this.foodPlan})
-      : super(key: key);
-  final List<Training>? trainings;
-  final List<Package>? packages;
-  final List<TrainingPlane>? trainingPlan;
-  final List<FoodPlane>? foodPlan;
+class HistoryScreen extends StatelessWidget {
+  const HistoryScreen({
+    Key? key,
+    required this.trainings,
+    required this.packages,
+  }) : super(key: key);
+  final List<TrainingHistory>? trainings;
+  final List<PackageHistory>? packages;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +23,7 @@ class MyTrainingScreen extends StatelessWidget {
       builder: (context, state) {
         return DefaultTabController(
           initialIndex: AppCubit.get(context).myTrainingIndex,
-          length: 4,
+          length: 2,
           child: Scaffold(
             backgroundColor: Colors.grey[300],
             appBar: AppBar(
@@ -37,7 +33,7 @@ class MyTrainingScreen extends StatelessWidget {
                   statusBarBrightness: Brightness.light),
               elevation: 0,
               title: const Text(
-                "اشتركاتي",
+                " سجل اشتركاتي",
                 style: TextStyle(color: primaryColor),
               ),
               backgroundColor: Colors.white,
@@ -54,18 +50,12 @@ class MyTrainingScreen extends StatelessWidget {
                     labelColor: Colors.black,
                     tabs: [
                       Tab(
-                        text: 'التدريبات',
+                        text: 'سجل التدريبات',
 
                         // child: Text('data'),
                       ),
                       Tab(
-                        text: 'الباقات',
-                      ),
-                      Tab(
-                        text: 'خطط تدريب',
-                      ),
-                      Tab(
-                        text: 'خطط غذاء',
+                        text: 'سجل الباقات',
                       ),
                     ],
                   ),
@@ -88,7 +78,7 @@ class MyTrainingScreen extends StatelessWidget {
                     Row(
                       children: const [
                         Text(
-                          'التدريبات',
+                          'السجلات',
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -122,8 +112,8 @@ class MyTrainingScreen extends StatelessWidget {
                               itemBuilder: (context, index) => buildTrainItem(
                                     context,
                                     train: trainings?[index],
-                                    trainings?[index].trainings?.name,
-                                    trainings?[index].trainings?.img,
+                                    trainings?[index].trainingHistoryData?.name,
+                                    trainings?[index].trainingHistoryData?.img,
                                     false,
                                     false,
                                   ),
@@ -144,8 +134,8 @@ class MyTrainingScreen extends StatelessWidget {
                           itemBuilder: (context, index) => buildTrainItem(
                                 context,
                                 train: packages?[index],
-                                packages?[index].packageData?.name,
-                                packages?[index].packageData?.img,
+                                packages?[index].packageHistoryData?.name,
+                                packages?[index].packageHistoryData?.img,
                                 false,
                                 false,
                               ),
@@ -155,43 +145,6 @@ class MyTrainingScreen extends StatelessWidget {
                           itemCount: packages?.length ?? 0),
                     if ((packages?.length ?? 0) == 0) buildNoItem(),
                     //train plan tap
-                    if ((trainingPlan?.length ?? 0) > 0)
-                      ListView.separated(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) => buildTrainItem(
-                                context,
-                                train: trainingPlan?[index],
-                                trainingPlan?[index].traininPlaneData?.name,
-                                trainingPlan?[index].traininPlaneData?.img,
-                                false,
-                                false,
-                              ),
-                          separatorBuilder: (context, index) => const SizedBox(
-                                width: 5,
-                              ),
-                          itemCount: trainingPlan?.length ?? 0),
-                    if ((trainingPlan?.length ?? 0) == 0) buildNoItem(),
-//food plan tap
-                    if ((foodPlan?.length ?? 0) > 0)
-                      ListView.separated(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) => buildTrainItem(
-                                context,
-                                train: foodPlan?[index],
-                                foodPlan?[index].foodPlaneData?.name,
-                                foodPlan?[index].foodPlaneData?.img,
-                                false,
-                                false,
-                              ),
-                          separatorBuilder: (context, index) => const SizedBox(
-                                width: 5,
-                              ),
-                          itemCount: foodPlan?.length ?? 0),
-                    if ((foodPlan?.length ?? 0) == 0) buildNoItem(),
                   ],
                 ),
               ),

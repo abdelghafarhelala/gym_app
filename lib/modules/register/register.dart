@@ -11,18 +11,6 @@ import 'package:gym_app/shared/const.dart';
 
 import 'registerCubit/registerStates.dart';
 
-String? gender = 'A';
-var emailController = TextEditingController();
-var hightController = TextEditingController();
-var illController = TextEditingController();
-var detailsController = TextEditingController();
-var wightController = TextEditingController();
-var nameController = TextEditingController();
-var phoneController = TextEditingController();
-var passwordController = TextEditingController();
-var confirmPasswordController = TextEditingController();
-var formKeyRegister = GlobalKey<FormState>();
-
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
 
@@ -61,35 +49,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
         builder: (context, state) {
           double screenHeight = MediaQuery.of(context).size.height;
           return Scaffold(
-            resizeToAvoidBottomInset: false,
-            // appBar: AppBar(
-            //   centerTitle: true,
-            //   backgroundColor: Colors.white,
-            //   elevation: 0,
-            //   iconTheme: IconThemeData(color: Colors.black),
-            //   systemOverlayStyle: const SystemUiOverlayStyle(
-            //     statusBarIconBrightness: Brightness.dark,
-            //     statusBarColor: Colors.white,
-            //   ),
-            //   title: const Text(
-            //     'حساب جديد ',
-            //     style: TextStyle(color: Colors.black),
-            //   ),
-            // ),
+            // resizeToAvoidBottomInset: false,
             body: AnnotatedRegion<SystemUiOverlayStyle>(
               value: const SystemUiOverlayStyle(
-                // For Android.
-                // Use [light] for white status bar and [dark] for black status bar.
                 statusBarIconBrightness: Brightness.dark,
                 statusBarColor: Colors.white,
-                // For iOS.
-                // Use [dark] for white status bar and [light] for black status bar.
                 statusBarBrightness: Brightness.dark,
               ),
               child: SingleChildScrollView(
                 child: Center(
                   child: Form(
-                    key: formKeyRegister,
+                    key: AppCubit.get(context).formKeyRegister,
                     child: Column(
                       children: [
                         const SizedBox(
@@ -98,8 +68,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Stack(
                           alignment: Alignment.topRight,
                           children: [
-                            Image.asset(
-                              'assets/images/register.jpg',
+                            Image.network(
+                              'https://img.freepik.com/free-vector/businessman-holding-pencil-big-complete-checklist-with-tick-marks_1150-35019.jpg?size=626&ext=jpg&uid=R76996913&ga=GA1.2.1634405249.1648830357',
                               height: 170,
                               width: double.infinity,
                               fit: BoxFit.cover,
@@ -133,7 +103,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 elevation: 1.5,
                                 child: defaultTextField(
                                     lable: 'الإسم',
-                                    controller: nameController,
+                                    controller: AppCubit.get(context)
+                                        .registerNameController,
                                     prefix: Icons.person_outline,
                                     validate: (String value) {
                                       if (value.isEmpty) {
@@ -156,7 +127,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       LengthLimitingTextInputFormatter(11),
                                     ],
                                     lable: 'رقم الهاتف',
-                                    controller: phoneController,
+                                    controller: AppCubit.get(context)
+                                        .registerPhoneController,
                                     prefix: Icons.phone_iphone,
                                     validate: (String value) {
                                       if (value.isEmpty) {
@@ -176,7 +148,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 elevation: 1.5,
                                 child: defaultTextField(
                                     lable: 'البريد الإلكتروني',
-                                    controller: emailController,
+                                    controller: AppCubit.get(context)
+                                        .registerEmailController,
                                     prefix: Icons.email_outlined,
                                     validate: (String value) {
                                       if (value.isEmpty) {
@@ -189,100 +162,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               const SizedBox(
                                 height: 5,
                               ),
-                              Card(
-                                shape: BeveledRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4.0),
-                                ),
-                                elevation: 1.5,
-                                child: defaultTextFieldWithCustomIconImage(
-                                    lable: 'الطول',
-                                    controller: hightController,
-                                    prefix: const ImageIcon(
-                                        AssetImage("assets/images/height.png")),
-                                    validate: (String value) {
-                                      if (value.isEmpty) {
-                                        return 'يجب أن تدخل الطول';
-                                      }
-                                    },
-                                    context: context,
-                                    type: TextInputType.text),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Card(
-                                shape: BeveledRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4.0),
-                                ),
-                                elevation: 1.5,
-                                child: defaultTextFieldWithCustomIconImage(
-                                    lable: 'الوزن',
-                                    controller: wightController,
-                                    prefix: const ImageIcon(
-                                        AssetImage("assets/images/height.png")),
-                                    validate: (String value) {
-                                      if (value.isEmpty) {
-                                        return 'يجب أن تدخل الوزن';
-                                      }
-                                    },
-                                    context: context,
-                                    type: TextInputType.text),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Card(
-                                shape: BeveledRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4.0),
-                                ),
-                                elevation: 1.5,
-                                child: defaultTextFieldWithCustomIconImage(
-                                    lable: 'الأمراض',
-                                    controller: illController,
-                                    prefix: const ImageIcon(
-                                        AssetImage("assets/images/sick.png")),
-                                    validate: (String value) {
-                                      if (value.isEmpty) {
-                                        return 'يجب أن تدخل الأمراض';
-                                      }
-                                    },
-                                    context: context,
-                                    type: TextInputType.text),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Card(
-                                shape: BeveledRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4.0),
-                                ),
-                                elevation: 1.5,
-                                child: defaultTextFieldWithCustomIconImage(
-                                    lable: 'الملاحظات',
-                                    controller: detailsController,
-                                    prefix: const ImageIcon(
-                                        AssetImage("assets/images/height.png")),
-                                    validate: (String value) {
-                                      if (value.isEmpty) {
-                                        return 'يجب أن تدخل الملاحظات';
-                                      }
-                                    },
-                                    context: context,
-                                    type: TextInputType.text),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
                               Row(
                                 children: [
                                   Expanded(
                                     child: RadioListTile(
                                       title: Text("ذكر"),
                                       value: "A",
-                                      groupValue: gender,
+                                      groupValue:
+                                          AppCubit.get(context).registerGender,
                                       onChanged: (value) {
                                         setState(() {
-                                          gender = value.toString();
+                                          AppCubit.get(context).registerGender =
+                                              value.toString();
                                         });
                                       },
                                     ),
@@ -291,10 +182,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     child: RadioListTile(
                                       title: Text("انثي"),
                                       value: "B",
-                                      groupValue: gender,
+                                      groupValue:
+                                          AppCubit.get(context).registerGender,
                                       onChanged: (value) {
                                         setState(() {
-                                          gender = value.toString();
+                                          AppCubit.get(context).registerGender =
+                                              value.toString();
                                         });
                                       },
                                     ),
@@ -310,7 +203,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                                 elevation: 1.5,
                                 child: defaultTextField(
-                                    controller: passwordController,
+                                    controller: AppCubit.get(context)
+                                        .registerPasswordController,
                                     lable: 'كلمة السر ',
                                     prefix: Icons.lock_outline,
                                     suffix: RegisterCubit.get(context).suffix,
@@ -328,25 +222,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     type: TextInputType.visiblePassword),
                               ),
                               const SizedBox(
-                                height: 15,
+                                height: 25,
                               ),
                               ConditionalBuilder(
                                 condition: state is! RegisterLoadingState,
                                 builder: (context) => defaultButton(
                                     height: screenHeight / 16,
                                     onPress: () {
-                                      if (formKeyRegister.currentState!
+                                      if (AppCubit.get(context)
+                                          .formKeyRegister
+                                          .currentState!
                                           .validate()) {
                                         RegisterCubit.get(context).userRegister(
-                                            email: emailController.text,
-                                            phone: phoneController.text,
-                                            name: nameController.text,
-                                            password: passwordController.text,
-                                            hight: hightController.text,
-                                            illnesses: illController.text,
-                                            notes: detailsController.text,
-                                            sex: gender ?? 'A',
-                                            weight: wightController.text);
+                                          email: AppCubit.get(context)
+                                              .registerEmailController
+                                              .text,
+                                          phone: AppCubit.get(context)
+                                              .registerPhoneController
+                                              .text,
+                                          name: AppCubit.get(context)
+                                              .registerNameController
+                                              .text,
+                                          password: AppCubit.get(context)
+                                              .registerPasswordController
+                                              .text,
+                                          sex: AppCubit.get(context)
+                                                  .registerGender ??
+                                              'A',
+                                        );
                                       } else {}
                                     },
                                     text: 'Register'),

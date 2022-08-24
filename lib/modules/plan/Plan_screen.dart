@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gym_app/modules/advice_details/advice_details.dart';
 import 'package:gym_app/shared/appCubit/app_cubit.dart';
 import 'package:gym_app/shared/appCubit/app_states.dart';
 import 'package:gym_app/shared/colors.dart';
@@ -90,23 +91,51 @@ class PlanScreen extends StatelessWidget {
                                   shrinkWrap: true,
                                   physics: BouncingScrollPhysics(),
                                   scrollDirection: Axis.vertical,
-                                  itemBuilder: (context, index) =>
-                                      buildPlanItem(
-                                        context: context,
-                                        name: AppCubit.get(context)
-                                                .foodPlanModel
-                                                ?.data?[index]
-                                                .name ??
-                                            '',
-                                        details: AppCubit.get(context)
-                                                .foodPlanModel
-                                                ?.data?[index]
-                                                .details ??
-                                            '',
-                                        image: AppCubit.get(context)
-                                            .foodPlanModel
-                                            ?.data?[index]
-                                            .img,
+                                  itemBuilder: (context, index) => InkWell(
+                                        onTap: () {
+                                          navigateTo(
+                                              context,
+                                              AdviceDetails(
+                                                image: AppCubit.get(context)
+                                                    .foodPlanModel
+                                                    ?.data?[index]
+                                                    .img,
+                                                title: AppCubit.get(context)
+                                                        .foodPlanModel
+                                                        ?.data?[index]
+                                                        .name ??
+                                                    '',
+                                                details: AppCubit.get(context)
+                                                        .foodPlanModel
+                                                        ?.data?[index]
+                                                        .details ??
+                                                    '',
+                                                isRequest: true,
+                                                appBarTitle: 'خطط غذائية',
+                                                id: AppCubit.get(context)
+                                                    .foodPlanModel
+                                                    ?.data?[index]
+                                                    .id,
+                                                type: 'food plans',
+                                              ));
+                                        },
+                                        child: buildPlanItem(
+                                          context: context,
+                                          name: AppCubit.get(context)
+                                                  .foodPlanModel
+                                                  ?.data?[index]
+                                                  .name ??
+                                              '',
+                                          details: AppCubit.get(context)
+                                                  .foodPlanModel
+                                                  ?.data?[index]
+                                                  .details ??
+                                              '',
+                                          image: AppCubit.get(context)
+                                              .foodPlanModel
+                                              ?.data?[index]
+                                              .img,
+                                        ),
                                       ),
                                   separatorBuilder: (context, index) =>
                                       const SizedBox(
@@ -123,23 +152,52 @@ class PlanScreen extends StatelessWidget {
                               shrinkWrap: true,
                               physics: BouncingScrollPhysics(),
                               scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) => buildPlanItem(
-                                  context: context,
-                                  name: AppCubit.get(context)
-                                          .trainPlanModel
-                                          ?.data?[index]
-                                          .name ??
-                                      '',
-                                  details: AppCubit.get(context)
-                                          .trainPlanModel
-                                          ?.data?[index]
-                                          .details ??
-                                      '',
-                                  image: AppCubit.get(context)
-                                          .trainPlanModel
-                                          ?.data?[index]
-                                          .img ??
-                                      ''),
+                              itemBuilder: (context, index) => InkWell(
+                                    onTap: () {
+                                      navigateTo(
+                                          context,
+                                          AdviceDetails(
+                                            image: AppCubit.get(context)
+                                                .trainPlanModel
+                                                ?.data?[index]
+                                                .img,
+                                            title: AppCubit.get(context)
+                                                    .trainPlanModel
+                                                    ?.data?[index]
+                                                    .name ??
+                                                '',
+                                            details: AppCubit.get(context)
+                                                    .trainPlanModel
+                                                    ?.data?[index]
+                                                    .details ??
+                                                '',
+                                            isRequest: true,
+                                            appBarTitle: 'خطط تدربيه',
+                                            id: AppCubit.get(context)
+                                                .trainPlanModel
+                                                ?.data?[index]
+                                                .id,
+                                            type: 'training plans',
+                                          ));
+                                    },
+                                    child: buildPlanItem(
+                                        context: context,
+                                        name: AppCubit.get(context)
+                                                .trainPlanModel
+                                                ?.data?[index]
+                                                .name ??
+                                            '',
+                                        details: AppCubit.get(context)
+                                                .trainPlanModel
+                                                ?.data?[index]
+                                                .details ??
+                                            '',
+                                        image: AppCubit.get(context)
+                                                .trainPlanModel
+                                                ?.data?[index]
+                                                .img ??
+                                            ''),
+                                  ),
                               separatorBuilder: (context, index) =>
                                   const SizedBox(
                                     width: 5,

@@ -43,6 +43,8 @@ class AppCubit extends Cubit<AppStates> {
   static AppCubit get(context) => BlocProvider.of(context);
   bool isFirst = true;
   int currentIndex = 2;
+  var formKeyLogin = GlobalKey<FormState>();
+  var formKeyRegister = GlobalKey<FormState>();
 
   List<Widget> buttonWidget(index) => [
         Column(
@@ -187,7 +189,7 @@ class AppCubit extends Cubit<AppStates> {
       // print(value.data);
       profile = ProfileModel.fromJson(value.data);
       print('********************************************');
-      print(profile?.data?.packages?[0].package?.name);
+      print(profile?.data?.package?[0].packageData?.name);
       print('********************************************');
       emit(AppGetUserDataSuccessState());
     }).catchError((error) {
@@ -298,7 +300,7 @@ class AppCubit extends Cubit<AppStates> {
   PackagesModel? packagesModel;
   void getPackagesData() {
     emit(AppGetPackagesLoadingState());
-    DioHelper.getData(url: packageUrl, token: token).then((value) {
+    DioHelper.getDataWithoutToken(url: packageUrl, token: token).then((value) {
       // print(value.data);
       packagesModel = PackagesModel.fromJson(value.data);
       packagesModel?.data?.forEach((element) {
@@ -358,9 +360,8 @@ class AppCubit extends Cubit<AppStates> {
   FoodAdvices? foodAdvices;
   void getFoodAdvicesData() {
     emit(AppGetFoodAdvicesLoadingState());
-    DioHelper.getData(url: foodAdvicesUrl, token: token).then((value) {
+    DioHelper.getDataWithoutToken(url: foodAdvicesUrl).then((value) {
       foodAdvices = FoodAdvices.fromJson(value.data);
-
       emit(AppGetFoodAdvicesSuccessState(foodAdvices));
       getPackagesData();
     }).catchError((error) {
@@ -373,7 +374,7 @@ class AppCubit extends Cubit<AppStates> {
   TrainAdvicesModel? trainAdvicesModel;
   void getTrainAdvicesData() {
     emit(AppGetTrainAdvicesLoadingState());
-    DioHelper.getData(url: trainAdvicesUrl, token: token).then((value) {
+    DioHelper.getDataWithoutToken(url: trainAdvicesUrl).then((value) {
       trainAdvicesModel = TrainAdvicesModel.fromJson(value.data);
 
       emit(AppGetTrainAdvicesSuccessState(trainAdvicesModel));
@@ -393,16 +394,12 @@ class AppCubit extends Cubit<AppStates> {
       required String email,
       required String message}) {
     emit(AppMakeContactLoadingState());
-    DioHelper.postData(
-            url: contactUsUrl,
-            data: {
-              "name": name,
-              "phone": phone,
-              "email": email,
-              "message": message
-            },
-            token: token)
-        .then((value) {
+    DioHelper.postDataWithoutToken(url: contactUsUrl, data: {
+      "name": name,
+      "phone": phone,
+      "email": email,
+      "message": message
+    }).then((value) {
       contactModel = ContactModel.fromJson(value.data);
       emit(AppMakeContactSuccessState(contactModel));
     }).catchError((error) {
@@ -512,6 +509,16 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
+  String? registerGender = 'A';
+  var registerEmailController = TextEditingController();
+  var registerHightController = TextEditingController();
+  var registerIllController = TextEditingController();
+  var registerDetailsController = TextEditingController();
+  var registerNameController = TextEditingController();
+  var registerPhoneController = TextEditingController();
+  var registerPasswordController = TextEditingController();
+  var registerConfirmPasswordController = TextEditingController();
+//update controllers
   var updateEmailController = TextEditingController();
   var updateHightController = TextEditingController();
   var updateIllController = TextEditingController();
@@ -537,7 +544,7 @@ class AppCubit extends Cubit<AppStates> {
   TrainingModel? trainingModel;
   void getTrainingData() {
     emit(AppGetTrainingLoadingState());
-    DioHelper.getData(url: trainingUrl, token: token).then((value) {
+    DioHelper.getDataWithoutToken(url: trainingUrl).then((value) {
       trainingModel = TrainingModel.fromJson(value.data);
       emit(AppGetTrainingSuccessState(trainingModel));
     }).catchError((error) {
@@ -550,7 +557,7 @@ class AppCubit extends Cubit<AppStates> {
   TrainPlanModel? trainPlanModel;
   void getTrainPlanData() {
     emit(AppGetTrainingPlanLoadingState());
-    DioHelper.getData(url: trainPlanUrl, token: token).then((value) {
+    DioHelper.getDataWithoutToken(url: trainPlanUrl).then((value) {
       trainPlanModel = TrainPlanModel.fromJson(value.data);
 
       emit(AppGetTrainingPlanSuccessState(trainPlanModel));
@@ -564,7 +571,9 @@ class AppCubit extends Cubit<AppStates> {
   FoodPlanModel? foodPlanModel;
   void getFoodPlanData() {
     emit(AppGetFoodPlanLoadingState());
-    DioHelper.getData(url: foodPlanUrl, token: token).then((value) {
+    DioHelper.getDataWithoutToken(
+      url: foodPlanUrl,
+    ).then((value) {
       foodPlanModel = FoodPlanModel.fromJson(value.data);
       emit(AppGetFoodPlanSuccessState(foodPlanModel));
     }).catchError((error) {
@@ -577,7 +586,7 @@ class AppCubit extends Cubit<AppStates> {
   TrainingOffersModel? trainingOffersModel;
   void getTrainAndOffersData() {
     emit(AppGetTrainAndOffersLoadingState());
-    DioHelper.getData(url: trainingOfferUrl, token: token).then((value) {
+    DioHelper.getDataWithoutToken(url: trainingOfferUrl).then((value) {
       trainingOffersModel = TrainingOffersModel.fromJson(value.data);
       emit(AppGetTrainAndOffersSuccessState(trainingOffersModel));
     }).catchError((error) {
@@ -586,6 +595,7 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
+  var controller = PageController(initialPage: 2);
   //update profile
   RequestModel? requestModel;
   void makeRequest({

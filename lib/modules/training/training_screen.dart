@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gym_app/modules/advice_details/advice_details.dart';
 import 'package:gym_app/shared/appCubit/app_cubit.dart';
 import 'package:gym_app/shared/appCubit/app_states.dart';
 import 'package:gym_app/shared/colors.dart';
@@ -76,12 +77,29 @@ class TrainingAndOffersScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: ListView.separated(
                           physics: const BouncingScrollPhysics(),
-                          itemBuilder: (context, index) => buildOfferItem(
-                              cubit?[index].img,
-                              cubit?[index].name ?? '',
-                              context,
-                              cubit?[index].offers?[0].sessionNum ?? 0,
-                              cubit?[index].offers?[0].price ?? 0),
+                          itemBuilder: (context, index) => InkWell(
+                                onTap: () {
+                                  navigateTo(
+                                      context,
+                                      AdviceDetails(
+                                        image: cubit?[index].img,
+                                        title: cubit?[index].name ?? '',
+                                        details:
+                                            '''   عروضك مميزه اليوم اشترك اللآن في ${cubit?[index].offers?[0].sessionNum ?? 0} حصص تدريبيه بسعر ${cubit?[index].offers?[0].price ?? 0} جنيه فقط \n \nعرض اخر مميز ليك انت بس اشترك في ${cubit?[index].offers?[1].sessionNum ?? 0} حصص تدريبيه بسعر ${cubit?[index].offers?[1].price ?? 0} جنيه بس ''',
+                                        isRequest: true,
+                                        appBarTitle: 'تمارين',
+                                        id: cubit?[index].id,
+                                        type: 'training',
+                                      ));
+                                  print('object');
+                                },
+                                child: buildOfferItem(
+                                    cubit?[index].img,
+                                    cubit?[index].name ?? '',
+                                    context,
+                                    cubit?[index].offers?[0].sessionNum ?? 0,
+                                    cubit?[index].offers?[0].price ?? 0),
+                              ),
                           separatorBuilder: (context, index) => const SizedBox(
                                 height: 1,
                               ),

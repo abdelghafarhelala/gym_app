@@ -7,11 +7,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_app/modules/advice_details/advice_details.dart';
 import 'package:gym_app/modules/home/home_screen.dart';
+import 'package:gym_app/modules/login/login.dart';
 import 'package:gym_app/modules/myDrawer/myDrawer.dart';
 import 'package:gym_app/modules/package_details/package_details_screen.dart';
 import 'package:gym_app/network/endpoints.dart';
 import 'package:gym_app/shared/appCubit/app_cubit.dart';
 import 'package:gym_app/shared/colors.dart';
+import 'package:gym_app/shared/const.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 void navigateTo(context, widget) => Navigator.push(
@@ -388,7 +390,7 @@ Widget buildTrainItem(
                   ),
                 ),
               )),
-          if (isPackages == true && isTrain == false)
+          if (isPackages == true && isTrain == false && token != null)
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: IconButton(
@@ -521,12 +523,19 @@ Widget buildSliderItem(double hight, double padding) => Padding(
       ),
     );
 
-Widget buildAdviceItem(
-        String? image, String text, context, String details, bool isStack) =>
+Widget buildAdviceItem(String? image, String text, context, String details,
+        bool isStack, bool isRequest, String appBarTitle) =>
     InkWell(
       onTap: () {
-        navigateTo(context,
-            AdviceDetails(image: image, title: text, details: details));
+        navigateTo(
+            context,
+            AdviceDetails(
+              image: image,
+              title: text,
+              details: details,
+              isRequest: isRequest,
+              appBarTitle: appBarTitle,
+            ));
       },
       child: SizedBox(
         width: 280,
@@ -609,93 +618,127 @@ Widget buildAdviceItem(
 
 Widget buildOfferItem(
         String? image, String name, context, int sessionNum, int price) =>
-    InkWell(
-      onTap: () {
-        // navigateTo(context,
-        //     AdviceDetails(image: image, title: text, details: details));
-      },
-      child: SizedBox(
-        width: 280,
-        child: Card(
-          elevation: 4,
-          clipBehavior: Clip.antiAlias,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          child: Column(
-            children: [
-              Stack(
-                alignment: Alignment(-3.3, -.2),
-                children: [
-                  if (image == null)
-                    Container(
-                      height: 160,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(7),
-                          ),
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                'https://img.freepik.com/premium-photo/young-ripped-man-bodybuilder-with-perfect-abs-shoulders-biceps-triceps-chest-posing-with-dumbbell_136403-1032.jpg?size=626&ext=jpg&uid=R76996913&ga=GA1.2.1634405249.1648830357',
-                              ),
-                              fit: BoxFit.cover)),
-                    ),
-                  if (image != null)
-                    Container(
-                      height: 160,
-                      decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(7),
-                          ),
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                '$imageLink$image',
-                              ),
-                              fit: BoxFit.cover)),
-                    ),
-                  RotationTransition(
-                    turns: new AlwaysStoppedAnimation(320 / 360),
-                    child: Container(
-                      width: 300,
-                      decoration: BoxDecoration(
-                          // color: primaryColor.withOpacity(.7),
-                          color: Colors.green.withOpacity(.7),
-                          borderRadius: BorderRadius.circular(15)),
-                      padding: EdgeInsets.all(10),
-                      child: Center(
-                        child: Text(
-                          '$sessionNum حصص بسعر $price جنيه فقط',
-                          style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+    SizedBox(
+      width: 280,
+      child: Card(
+        elevation: 4,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment(-3.3, -.2),
+              children: [
+                if (image == null)
+                  Container(
+                    height: 160,
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(7),
                         ),
+                        image: DecorationImage(
+                            image: NetworkImage(
+                              'https://img.freepik.com/premium-photo/young-ripped-man-bodybuilder-with-perfect-abs-shoulders-biceps-triceps-chest-posing-with-dumbbell_136403-1032.jpg?size=626&ext=jpg&uid=R76996913&ga=GA1.2.1634405249.1648830357',
+                            ),
+                            fit: BoxFit.cover)),
+                  ),
+                if (image != null)
+                  Container(
+                    height: 160,
+                    decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(7),
+                        ),
+                        image: DecorationImage(
+                            image: NetworkImage(
+                              '$imageLink$image',
+                            ),
+                            fit: BoxFit.cover)),
+                  ),
+                RotationTransition(
+                  turns: new AlwaysStoppedAnimation(320 / 360),
+                  child: Container(
+                    width: 300,
+                    decoration: BoxDecoration(
+                        // color: primaryColor.withOpacity(.7),
+                        color: Colors.green.withOpacity(.7),
+                        borderRadius: BorderRadius.circular(15)),
+                    padding: EdgeInsets.all(10),
+                    child: Center(
+                      child: Text(
+                        '$sessionNum حصص بسعر $price جنيه فقط',
+                        style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  name,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                name,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(
-                height: 5,
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+          ],
+        ),
+      ),
+    );
+
+Widget buildLoginItem(context) => Column(
+      children: [
+        Image.network(
+          'https://img.freepik.com/free-vector/welcome-concept-illustration_23-2148277019.jpg?size=626&ext=jpg&uid=R76996913&ga=GA1.2.1634405249.1648830357',
+          height: 300,
+          width: double.infinity,
+          fit: BoxFit.cover,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: const [
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'لم تسجل دخول بعد لنعرض هذه البيانات سجل معنا الآن لتري مزايا التطبيق ',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey),
+                  ),
+                ),
               ),
             ],
           ),
         ),
-      ),
+        const SizedBox(
+          height: 30,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child:
+              defaultButton(height: 50, onPress: () {}, text: 'تسجيل الدخول'),
+        )
+      ],
     );

@@ -26,9 +26,12 @@ class Data {
   String? notes;
   String? sex;
   String? profilePhotoPath;
+  String? qrCode;
   String? profilePhotoUrl;
   List<Training>? training;
-  List<Packages>? packages;
+  List<Package>? package;
+  List<TrainingHistory>? trainingHistory;
+  List<PackageHistory>? packageHistory;
   SubscribeStatus? subscribeStatus;
   List<FoodPlane>? foodPlane;
   List<TrainingPlane>? trainingPlane;
@@ -44,9 +47,12 @@ class Data {
       this.notes,
       this.sex,
       this.profilePhotoPath,
+      this.qrCode,
       this.profilePhotoUrl,
       this.training,
-      this.packages,
+      this.package,
+      this.trainingHistory,
+      this.packageHistory,
       this.subscribeStatus,
       this.foodPlane,
       this.trainingPlane});
@@ -62,32 +68,45 @@ class Data {
     notes = json['notes'];
     sex = json['sex'];
     profilePhotoPath = json['profile_photo_path'];
+    qrCode = json['qr_code'];
     profilePhotoUrl = json['profile_photo_url'];
     if (json['training'] != null) {
       training = <Training>[];
       json['training'].forEach((v) {
-        training!.add(new Training.fromJson(v));
+        training!.add(Training.fromJson(v));
       });
     }
     if (json['package'] != null) {
-      packages = <Packages>[];
+      package = <Package>[];
       json['package'].forEach((v) {
-        packages!.add(new Packages.fromJson(v));
+        package!.add(Package.fromJson(v));
+      });
+    }
+    if (json['training_history'] != null) {
+      trainingHistory = <TrainingHistory>[];
+      json['training_history'].forEach((v) {
+        trainingHistory!.add(TrainingHistory.fromJson(v));
+      });
+    }
+    if (json['package_history'] != null) {
+      packageHistory = <PackageHistory>[];
+      json['package_history'].forEach((v) {
+        packageHistory!.add(PackageHistory.fromJson(v));
       });
     }
     subscribeStatus = json['subscribe_status'] != null
-        ? new SubscribeStatus.fromJson(json['subscribe_status'])
+        ? SubscribeStatus.fromJson(json['subscribe_status'])
         : null;
     if (json['food_plane'] != null) {
       foodPlane = <FoodPlane>[];
       json['food_plane'].forEach((v) {
-        foodPlane!.add(new FoodPlane.fromJson(v));
+        foodPlane!.add(FoodPlane.fromJson(v));
       });
     }
     if (json['training_plane'] != null) {
       trainingPlane = <TrainingPlane>[];
       json['training_plane'].forEach((v) {
-        trainingPlane!.add(new TrainingPlane.fromJson(v));
+        trainingPlane!.add(TrainingPlane.fromJson(v));
       });
     }
   }
@@ -116,7 +135,7 @@ class Training {
     startDate = json['start_date'];
     endDate = json['end_date'];
     trainings = json['trainings'] != null
-        ? new Trainings.fromJson(json['trainings'])
+        ? Trainings.fromJson(json['trainings'])
         : null;
   }
 }
@@ -125,60 +144,115 @@ class Trainings {
   int? id;
   String? name;
   String? nameEn;
-  String? image;
+  String? img;
 
-  Trainings({this.id, this.name, this.nameEn, this.image});
+  Trainings({this.id, this.name, this.nameEn, this.img});
 
   Trainings.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     nameEn = json['name_en'];
-    image = json['img'];
-  }
-}
-
-class Packages {
-  int? id;
-  int? userId;
-  int? packageId;
-  String? startDate;
-  String? endDate;
-  Package? package;
-
-  Packages(
-      {this.id,
-      this.userId,
-      this.packageId,
-      this.startDate,
-      this.endDate,
-      this.package});
-
-  Packages.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userId = json['user_id'];
-    packageId = json['package_id'];
-    startDate = json['start_date'];
-    endDate = json['end_date'];
-    package =
-        json['package'] != null ? new Package.fromJson(json['package']) : null;
+    img = json['img'];
   }
 }
 
 class Package {
   int? id;
+  int? userId;
+  int? packageId;
+  String? startDate;
+  String? endDate;
+  PackageData? packageData;
+
+  Package(
+      {this.id,
+      this.userId,
+      this.packageId,
+      this.startDate,
+      this.endDate,
+      this.packageData});
+
+  Package.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    userId = json['user_id'];
+    packageId = json['package_id'];
+    startDate = json['start_date'];
+    endDate = json['end_date'];
+    packageData =
+        json['package'] != null ? PackageData.fromJson(json['package']) : null;
+  }
+}
+
+class PackageData {
+  int? id;
   int? trainingId;
   String? name;
   String? nameEn;
-  String? image;
+  String? img;
 
-  Package({this.id, this.trainingId, this.name, this.nameEn, this.image});
+  PackageData({this.id, this.trainingId, this.name, this.nameEn, this.img});
 
-  Package.fromJson(Map<String, dynamic> json) {
+  PackageData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     trainingId = json['training_id'];
     name = json['name'];
     nameEn = json['name_en'];
-    image = json['img'];
+    img = json['img'];
+  }
+}
+
+class TrainingHistory {
+  int? id;
+  int? userId;
+  int? trainingId;
+  String? startDate;
+  String? endDate;
+  Trainings? trainingHistoryData;
+
+  TrainingHistory(
+      {this.id,
+      this.userId,
+      this.trainingId,
+      this.startDate,
+      this.endDate,
+      this.trainingHistoryData});
+
+  TrainingHistory.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    userId = json['user_id'];
+    trainingId = json['training_id'];
+    startDate = json['start_date'];
+    endDate = json['end_date'];
+    trainingHistoryData = json['trainings'] != null
+        ? Trainings.fromJson(json['trainings'])
+        : null;
+  }
+}
+
+class PackageHistory {
+  int? id;
+  int? userId;
+  int? packageId;
+  String? startDate;
+  String? endDate;
+  PackageData? packageHistoryData;
+
+  PackageHistory(
+      {this.id,
+      this.userId,
+      this.packageId,
+      this.startDate,
+      this.endDate,
+      this.packageHistoryData});
+
+  PackageHistory.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    userId = json['user_id'];
+    packageId = json['package_id'];
+    startDate = json['start_date'];
+    endDate = json['end_date'];
+    packageHistoryData =
+        json['package'] != null ? PackageData.fromJson(json['package']) : null;
   }
 }
 
@@ -230,7 +304,7 @@ class FoodPlane {
   int? planId;
   String? startDate;
   String? endDate;
-  PlaneFo? plane;
+  FoodPlaneData? foodPlaneData;
 
   FoodPlane(
       {this.id,
@@ -239,7 +313,7 @@ class FoodPlane {
       this.planId,
       this.startDate,
       this.endDate,
-      this.plane});
+      this.foodPlaneData});
 
   FoodPlane.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -248,7 +322,37 @@ class FoodPlane {
     planId = json['plan_id'];
     startDate = json['start_date'];
     endDate = json['end_date'];
-    plane = json['plane'] != null ? PlaneFo.fromJson(json['plane']) : null;
+    foodPlaneData =
+        json['plane'] != null ? FoodPlaneData.fromJson(json['plane']) : null;
+  }
+}
+
+class FoodPlaneData {
+  int? id;
+  String? type;
+  String? name;
+  String? nameEn;
+  String? img;
+  String? details;
+  String? detailsEn;
+
+  FoodPlaneData(
+      {this.id,
+      this.type,
+      this.name,
+      this.nameEn,
+      this.img,
+      this.details,
+      this.detailsEn});
+
+  FoodPlaneData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    type = json['type'];
+    name = json['name'];
+    nameEn = json['name_en'];
+    img = json['img'];
+    details = json['details'];
+    detailsEn = json['details_en'];
   }
 }
 
@@ -259,7 +363,7 @@ class TrainingPlane {
   int? planId;
   String? startDate;
   String? endDate;
-  Plane? plane;
+  FoodPlaneData? traininPlaneData;
 
   TrainingPlane(
       {this.id,
@@ -268,7 +372,7 @@ class TrainingPlane {
       this.planId,
       this.startDate,
       this.endDate,
-      this.plane});
+      this.traininPlaneData});
 
   TrainingPlane.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -277,64 +381,7 @@ class TrainingPlane {
     planId = json['plan_id'];
     startDate = json['start_date'];
     endDate = json['end_date'];
-    plane = json['plane'] != null ? new Plane.fromJson(json['plane']) : null;
-  }
-}
-
-class Plane {
-  int? id;
-  String? type;
-  String? name;
-  String? nameEn;
-  String? img;
-  String? details;
-  String? detailsEn;
-
-  Plane(
-      {this.id,
-      this.type,
-      this.name,
-      this.nameEn,
-      this.img,
-      this.details,
-      this.detailsEn});
-
-  Plane.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    type = json['type'];
-    name = json['name'];
-    nameEn = json['name_en'];
-    img = json['img'];
-    details = json['details'];
-    detailsEn = json['details_en'];
-  }
-}
-
-class PlaneFo {
-  int? id;
-  String? type;
-  String? name;
-  String? nameEn;
-  String? img;
-  String? details;
-  String? detailsEn;
-
-  PlaneFo(
-      {this.id,
-      this.type,
-      this.name,
-      this.nameEn,
-      this.img,
-      this.details,
-      this.detailsEn});
-
-  PlaneFo.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    type = json['type'];
-    name = json['name'];
-    nameEn = json['name_en'];
-    img = json['img'];
-    details = json['details'];
-    detailsEn = json['details_en'];
+    traininPlaneData =
+        json['plane'] != null ? FoodPlaneData.fromJson(json['plane']) : null;
   }
 }

@@ -29,11 +29,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
     required String phone,
     required String name,
     required String password,
-    required String weight,
-    required String illnesses,
-    required String notes,
     required String sex,
-    required String hight,
   }) {
     emit(RegisterLoadingState());
     DioHelper.postDataWithoutToken(url: registerUrl, data: {
@@ -41,10 +37,6 @@ class RegisterCubit extends Cubit<RegisterStates> {
       'mobile': phone,
       'name': name,
       'password': password,
-      'length': hight,
-      'weight': weight,
-      'illnesses': illnesses,
-      'notes': notes,
       'sex': sex,
       'onesignal_id': 'lkfjfkj0450jflfjotij5iufdiueiu433i4ujkdnfd',
     }).then((value) {

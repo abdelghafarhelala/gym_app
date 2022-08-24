@@ -85,7 +85,9 @@ class HomeScreen extends StatelessWidget {
                                             ?.data?[index]
                                             .details ??
                                         '',
-                                    false),
+                                    false,
+                                    false,
+                                    'النصائح'),
                                 separatorBuilder: (context, index) =>
                                     const SizedBox(
                                       width: 5,
@@ -144,7 +146,9 @@ class HomeScreen extends StatelessWidget {
                                           ?.data?[index]
                                           .details ??
                                       '',
-                                  false),
+                                  false,
+                                  false,
+                                  'النصائح'),
                               separatorBuilder: (context, index) =>
                                   const SizedBox(
                                     width: 5,
