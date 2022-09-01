@@ -27,17 +27,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         listener: (context, state) {
           if (state is RegisterSuccessState) {
             if (state.model?.result == true) {
-              CacheHelper.saveData(
-                      key: "token", value: state.model?.success?.token)
-                  .then((value) {
-                token = state.model?.success?.token;
-                AppCubit.get(context).getUserData();
-                showToast(
-                    text: state.model?.errorMessage,
-                    state: ToastStates.success);
-                navigateAndFinish(context, const LoginScreen());
-                // print(state.model?.user!.name);
-              });
+              showToast(
+                  text: state.model?.errorMessage, state: ToastStates.success);
+              navigateAndFinish(context, const LoginScreen());
+              // print(state.model?.user!.name);
+
             } else {
               showToast(
                   text: state.model?.errorMessage, state: ToastStates.error);
