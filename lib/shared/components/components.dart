@@ -728,8 +728,12 @@ Widget buildLoginItem(context) => Column(
         ),
         Padding(
           padding: const EdgeInsets.all(12.0),
-          child:
-              defaultButton(height: 50, onPress: () {}, text: 'تسجيل الدخول'),
+          child: defaultButton(
+              height: 50,
+              onPress: () {
+                navigateTo(context, LoginScreen());
+              },
+              text: 'تسجيل الدخول'),
         )
       ],
     );
