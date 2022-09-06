@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gym_app/models/profile/profileModel.dart';
+import 'package:gym_app/modules/advice_details/advice_details.dart';
 import 'package:gym_app/shared/appCubit/app_cubit.dart';
 import 'package:gym_app/shared/appCubit/app_states.dart';
 import 'package:gym_app/shared/colors.dart';
@@ -141,13 +142,16 @@ class MyTrainingScreen extends StatelessWidget {
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
                           scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) => buildTrainItem(
-                                context,
-                                train: packages?[index],
-                                packages?[index].packageData?.name,
-                                packages?[index].packageData?.img,
-                                false,
-                                false,
+                          itemBuilder: (context, index) => InkWell(
+                                onTap: () {},
+                                child: buildTrainItem(
+                                  context,
+                                  train: packages?[index],
+                                  packages?[index].packageData?.name,
+                                  packages?[index].packageData?.img,
+                                  false,
+                                  false,
+                                ),
                               ),
                           separatorBuilder: (context, index) => const SizedBox(
                                 width: 5,
@@ -160,13 +164,33 @@ class MyTrainingScreen extends StatelessWidget {
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
                           scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) => buildTrainItem(
-                                context,
-                                train: trainingPlan?[index],
-                                trainingPlan?[index].traininPlaneData?.name,
-                                trainingPlan?[index].traininPlaneData?.img,
-                                false,
-                                false,
+                          itemBuilder: (context, index) => InkWell(
+                                onTap: () {
+                                  navigateTo(
+                                      context,
+                                      AdviceDetails(
+                                          image: trainingPlan?[index]
+                                              .traininPlaneData
+                                              ?.img,
+                                          title: trainingPlan?[index]
+                                                  .traininPlaneData
+                                                  ?.name ??
+                                              '',
+                                          details: trainingPlan?[index]
+                                                  .traininPlaneData
+                                                  ?.details ??
+                                              '',
+                                          isRequest: false,
+                                          appBarTitle: 'خطط تدريبية'));
+                                },
+                                child: buildTrainItem(
+                                  context,
+                                  train: trainingPlan?[index],
+                                  trainingPlan?[index].traininPlaneData?.name,
+                                  trainingPlan?[index].traininPlaneData?.img,
+                                  false,
+                                  false,
+                                ),
                               ),
                           separatorBuilder: (context, index) => const SizedBox(
                                 width: 5,
@@ -179,13 +203,33 @@ class MyTrainingScreen extends StatelessWidget {
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
                           scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) => buildTrainItem(
-                                context,
-                                train: foodPlan?[index],
-                                foodPlan?[index].foodPlaneData?.name,
-                                foodPlan?[index].foodPlaneData?.img,
-                                false,
-                                false,
+                          itemBuilder: (context, index) => InkWell(
+                                onTap: () {
+                                  navigateTo(
+                                      context,
+                                      AdviceDetails(
+                                          image: foodPlan?[index]
+                                              .foodPlaneData
+                                              ?.img,
+                                          title: foodPlan?[index]
+                                                  .foodPlaneData
+                                                  ?.name ??
+                                              '',
+                                          details: foodPlan?[index]
+                                                  .foodPlaneData
+                                                  ?.details ??
+                                              '',
+                                          isRequest: false,
+                                          appBarTitle: 'خطط غذائيه'));
+                                },
+                                child: buildTrainItem(
+                                  context,
+                                  train: foodPlan?[index],
+                                  foodPlan?[index].foodPlaneData?.name,
+                                  foodPlan?[index].foodPlaneData?.img,
+                                  false,
+                                  false,
+                                ),
                               ),
                           separatorBuilder: (context, index) => const SizedBox(
                                 width: 5,
