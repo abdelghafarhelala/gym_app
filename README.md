@@ -1,16 +1,16 @@
-# gym_app
+# لياقتي
 
-A new Flutter project.
+A new Flutter project for excercises or fittness for any club or Gym or training center.
 
-## Getting Started
+## Intoduction about لياقتي app
 
-This project is a starting point for a Flutter application.
+This is a project that help gym or any club to Organize his activity by user can show any thing on the app without login in the app like advices and packages in the gym or club and can also show the plans that he can subscribe . when user login he can send a request to gym that he need to subscribe at any package or plan and also can make a favorite list and also have his history of subscribtion . and his profile have any info about him. 
 
-A few resources to get you started if this is your first Flutter project:
+## Technologies used in app
+Dart
+Flutter
+Dio
+Rest APIs
+Bloc
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
