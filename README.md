@@ -1,4 +1,4 @@
-# لياقتي
+#  لياقتي Application
 
 A new Flutter project for excercises or fittness for any club or Gym or training center.
 
